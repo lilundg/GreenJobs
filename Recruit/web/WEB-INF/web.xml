@@ -22,16 +22,14 @@
         <welcome-file>faces/index.xhtml</welcome-file>
     </welcome-file-list>
     <security-constraint>
-        <display-name>admin realm</display-name>
+        <display-name>Create application</display-name>
         <web-resource-collection>
-            <web-resource-name>admin</web-resource-name>
+            <web-resource-name>Create</web-resource-name>
             <description/>
-            <url-pattern>/faces/admin/</url-pattern>
+            <url-pattern>/recruit/*</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
         </web-resource-collection>
-        <auth-constraint>
-            <description>admin only</description>
-            <role-name>Admin</role-name>
-        </auth-constraint>
         <user-data-constraint>
             <description/>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
@@ -39,21 +37,35 @@
     </security-constraint>
     <login-config>
         <auth-method>FORM</auth-method>
+        <realm-name>JLogin</realm-name>
         <form-login-config>
             <form-login-page>/login.html</form-login-page>
-            <form-error-page>/login.html</form-error-page>
+            <form-error-page>/error.html</form-error-page>
         </form-login-config>
     </login-config>
     <security-role>
         <description/>
-        <role-name>Applicant</role-name>
+        <role-name>job_seeker</role-name>
     </security-role>
     <security-role>
         <description/>
-        <role-name>Recruiter</role-name>
+        <role-name>recruit</role-name>
     </security-role>
-    <security-role>
-        <description/>
-        <role-name>Admin</role-name>
-    </security-role>
+    <security-constraint>
+        <display-name>Reviewer</display-name>
+        <web-resource-collection>
+            <web-resource-name>View applications</web-resource-name>
+            <description/>
+            <url-pattern>/applications/*</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>recruit</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
 </web-app>
