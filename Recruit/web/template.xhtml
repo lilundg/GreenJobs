@@ -3,7 +3,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:c="http://java.sun.com/jsp/jstl/core">
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <f:view locale="#{language.locale}">
     <h:head>
         <h:outputStylesheet library="css" name="default.css"/>
         <title><ui:insert name="pageTitle">Template title</ui:insert></title>
@@ -13,23 +15,28 @@
             <h:graphicImage  library="images" name="banner.jpg" alt="#{msgs.bannerAlt}" />
         </div>
         <div id="navigation">
-            <ul class="nav">
-                <li class="nav">
-                    <h:outputLink class="nav" value="index.xhtml">
+            <ul>
+                <li>
+                    <h:outputLink value="index.xhtml">
                         #{msgs.navHome}
                     </h:outputLink>
                 </li>
-                <li class="nav">
-                    <h:outputLink class="nav" value="recruit/jobs.xhtml">
+                <li>
+                    <h:outputLink class="nav" value="register.xhtml">
                         #{msgs.navJob}
                     </h:outputLink>
                 </li>
-                <li class="nav">
+                <li>
                     <h:outputLink class="nav" value="#">
                         #{msgs.navAbout}
                     </h:outputLink>
                 </li>
             </ul>
+            <h:form>
+                <h:selectOneMenu value="#{language.locale}" onchange="submit()" valueChangeListener="#{language.localeChanged}">
+                    <f:selectItems value="#{language.countries}" />
+                </h:selectOneMenu>
+            </h:form>
         </div>
         <div id="content">
             <ui:insert name="content">Content</ui:insert>
@@ -38,5 +45,6 @@
             &copy; 2013 #{msgs.companyName}.
         </div>
     </h:body>
+    </f:view>
 </html>
 
