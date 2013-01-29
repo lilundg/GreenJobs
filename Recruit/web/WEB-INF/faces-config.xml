@@ -15,5 +15,6 @@
             <base-name>andlin.recruit.locale.messages</base-name>
             <var>msgs</var>
         </resource-bundle>
+       
     </application>
 </faces-config>
