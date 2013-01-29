@@ -2,20 +2,40 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
         <h:outputStylesheet library="css" name="default.css"/>
-        <title>Facelet Template</title>
+        <title><ui:insert name="pageTitle">Template title</ui:insert></title>
     </h:head>
     <h:body>
         <div id="banner">
-            <h:graphicImage name="banner.jpg" alt="Röda lund" />
+            <h:graphicImage  library="images" name="banner.jpg" alt="#{msgs.bannerAlt}" />
+        </div>
+        <div id="navigation">
+            <ul class="nav">
+                <li class="nav">
+                    <h:outputLink class="nav" value="index.xhtml">
+                        #{msgs.navHome}
+                    </h:outputLink>
+                </li>
+                <li class="nav">
+                    <h:outputLink class="nav" value="recruit/jobs.xhtml">
+                        #{msgs.navJob}
+                    </h:outputLink>
+                </li>
+                <li class="nav">
+                    <h:outputLink class="nav" value="#">
+                        #{msgs.navAbout}
+                    </h:outputLink>
+                </li>
+            </ul>
         </div>
         <div id="content">
             <ui:insert name="content">Content</ui:insert>
         </div>
         <div id="footer">
-            &copy; 2013 Red lund.
+            &copy; 2013 #{msgs.companyName}.
         </div>
     </h:body>
 </html>

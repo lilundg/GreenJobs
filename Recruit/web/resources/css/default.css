@@ -1,0 +1,45 @@
+body{
+    margin:10px;
+}
+
+#banner{
+    min-height: 70px;
+    max-width: 400px;
+    background-color:#990000;
+}
+
+#navigation{
+    margin-top: 6px;
+    margin-bottom:10px;
+}
+
+#navigation ul{
+    list-style-type:none;
+    margin:0;
+    padding:0;
+}
+
+#navigation li{
+    display:inline;
+}
+
+#navigation a:link,a:visited{
+    font-weight:bold;
+    color: #ffffff;
+    background-color:#ff0000;
+    text-decoration:none;
+    text-transform:uppercase;
+    padding:6px;
+}
+
+#navigation a:hover,a:active{
+    background-color:#cc0000;
+}
+
+#content{
+    padding:6px;
+}
+
+#footer{
+    
+}

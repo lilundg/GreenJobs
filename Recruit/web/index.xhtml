@@ -3,14 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html">
-    <h:head>
-        <title>Welcome</title>
-    </h:head>
     <h:body>
         <ui:composition template="./template.xhtml">
+            <ui:define name="pageTitle">
+                #{msgs.indexTitle}
+            </ui:define>
             <ui:define name="content">
-                <h:outputText value="#{msgs.indexWelcome}" /><br />
-                <!--<h:outputLink value="recruitment/"-->
+                #{msgs.indexWelcome}<br />
             </ui:define>
         </ui:composition>
     </h:body>
