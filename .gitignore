@@ -1,2 +1,7 @@
 /Recruit/nbproject/private/
 .DS_Store
+.error
+Recruit/src/conf/persistence.xml
+/Recruit/build/
+/Recruit/dist/
+/WebApplication1/
