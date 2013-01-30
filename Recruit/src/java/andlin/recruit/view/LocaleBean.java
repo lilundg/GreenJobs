@@ -21,6 +21,7 @@ public class LocaleBean implements Serializable{
     private Map<String,Object> countries;
     
     public LocaleBean(){
+        locale = FacesContext.getCurrentInstance().getViewRoot().getLocale().toString();
         countries = new LinkedHashMap<String,Object>();
         countries.put("English", new Locale("en"));
         countries.put("Svenska", new Locale("sv"));
