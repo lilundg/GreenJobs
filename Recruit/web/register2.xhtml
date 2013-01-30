@@ -9,31 +9,62 @@
     <h:body>
                 <h:form>
             <h:panelGrid>
-                <h:outputLabel value="Great Success :"/>
+                <h:outputLabel id="areaOfExpertiseText" value="Select area of expertise :"/>
                 
                 <f:view>
                     <h:form>
-                        <h1><h:outputText value="List"/></h1>
-                        <h:dataTable value="#{registrationManager.expertise}" var="item">
-                            <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="CompetenceId"/>
-                                </f:facet>
-                                <h:outputText value="#{item.competenceId}"/>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Name"/>
-                                </f:facet>
-                                <h:outputText value="#{item.name}"/>
-                            </h:column>
-                        </h:dataTable>
+                        <h:selectOneMenu id="competences"
+                                         value="#{registrationManager.expertise}">
+                            <f:selectItems value="#{registrationManager.competenceList}"/> 
+                        </h:selectOneMenu>
+              
                     </h:form>
                 </f:view>
+                
+                <h:outputLabel for="yearsOfExperience" value="Years of experience :"/>
+                <h:inputText id="yearsOfExperience" value="#{registrationManager.yearsOfExperience}" required="true"/>
+                <h:message for="yearsOfExperience"/>
+                
+                <h:commandButton value="Add" action="#{registrationManager.addCompetence}"/>
+                <h:commandButton value="Continue" action="#{registrationManager.createCompetence}"/>
+                
+            </h:panelGrid>      
+                    
+            
+        </h:form>
+        <f:view>
+            <h:form>
+                <h:outputText value="Selected areas of expertise"/>
+                <h:dataTable value="#{registrationManager.selectedExpertise}" var="item">
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="CompetenceProfileId"/>
+                        </f:facet>
+                        <h:outputText value="#{item.competenceProfileId}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="PersonId"/>
+                        </f:facet>
+                        <h:outputText value="#{item.personId}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="CompetenceId"/>
+                        </f:facet>
+                        <h:outputText value="#{item.competenceId}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="YearsOfExperience"/>
+                        </f:facet>
+                        <h:outputText value="#{item.yearsOfExperience}"/>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+        </f:view>
 
         
-            </h:panelGrid>
-        </h:form>
     </h:body>
 </html>
 
