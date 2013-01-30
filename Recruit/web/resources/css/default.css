@@ -9,8 +9,11 @@ body{
 }
 
 #navigation{
-    margin-top: 6px;
+    margin-top: 5px;
     margin-bottom:10px;
+    color: #ffffff;
+    text-transform:uppercase;
+    font-weight:bold;
 }
 
 #navigation ul{
@@ -24,16 +27,24 @@ body{
 }
 
 #navigation a:link,a:visited{
-    font-weight:bold;
     color: #ffffff;
     background-color:#ff0000;
     text-decoration:none;
-    text-transform:uppercase;
     padding:6px;
 }
 
 #navigation a:hover,a:active{
     background-color:#cc0000;
+}
+
+#navigation form{
+    display: inline;
+    background-color: #ff0000;
+    padding: 6px;
+}
+
+#navigation label{
+    margin-right: 4px;
 }
 
 #content{
