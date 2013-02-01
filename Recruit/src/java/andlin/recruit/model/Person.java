@@ -5,11 +5,12 @@
 package andlin.recruit.model;
 
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.Collection;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -26,7 +27,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Person.findBySsn", query = "SELECT p FROM Person p WHERE p.ssn = :ssn"),
     @NamedQuery(name = "Person.findByEmail", query = "SELECT p FROM Person p WHERE p.email = :email"),
     @NamedQuery(name = "Person.findByPassword", query = "SELECT p FROM Person p WHERE p.password = :password"),
-    @NamedQuery(name = "Person.findByRoleId", query = "SELECT p FROM Person p WHERE p.roleId = :roleId"),
     @NamedQuery(name = "Person.findByUsername", query = "SELECT p FROM Person p WHERE p.username = :username")})
 public class Person implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -36,10 +36,14 @@ public class Person implements Serializable {
     @NotNull
     @Column(name = "person_id")
     private Long personId;
-    @Size(max = 255)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
     @Column(name = "name")
     private String name;
-    @Size(max = 255)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
     @Column(name = "surname")
     private String surname;
     @Size(max = 255)
@@ -52,17 +56,28 @@ public class Person implements Serializable {
     @Size(max = 255)
     @Column(name = "password")
     private String password;
-    @Column(name = "role_id")
-    private BigInteger roleId;
     @Size(max = 255)
     @Column(name = "username")
     private String username;
+    @JoinColumn(name = "role_id", referencedColumnName = "role_id")
+    @ManyToOne(optional = false)
+    private Role roleId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "personId")
+    private Collection<CompetenceProfile> competenceProfileCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "personId")
+    private Collection<Availability> availabilityCollection;
 
     public Person() {
     }
 
     public Person(Long personId) {
         this.personId = personId;
+    }
+
+    public Person(Long personId, String name, String surname) {
+        this.personId = personId;
+        this.name = name;
+        this.surname = surname;
     }
 
     public Long getPersonId() {
@@ -113,20 +128,38 @@ public class Person implements Serializable {
         this.password = password;
     }
 
-    public BigInteger getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(BigInteger roleId) {
-        this.roleId = roleId;
-    }
-
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Role getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Role roleId) {
+        this.roleId = roleId;
+    }
+
+    @XmlTransient
+    public Collection<CompetenceProfile> getCompetenceProfileCollection() {
+        return competenceProfileCollection;
+    }
+
+    public void setCompetenceProfileCollection(Collection<CompetenceProfile> competenceProfileCollection) {
+        this.competenceProfileCollection = competenceProfileCollection;
+    }
+
+    @XmlTransient
+    public Collection<Availability> getAvailabilityCollection() {
+        return availabilityCollection;
+    }
+
+    public void setAvailabilityCollection(Collection<Availability> availabilityCollection) {
+        this.availabilityCollection = availabilityCollection;
     }
 
     @Override
@@ -151,7 +184,7 @@ public class Person implements Serializable {
 
     @Override
     public String toString() {
-        return "andlin.recruit.view.Person[ personId=" + personId + " ]";
+        return "andlin.recruit.model.Person[ personId=" + personId + " ]";
     }
     
 }

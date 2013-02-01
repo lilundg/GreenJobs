@@ -86,7 +86,6 @@ CREATE TABLE `person` (
   `password` varchar(255) DEFAULT NULL,
   `role_id` bigint(20) NOT NULL,
   `username` varchar(255) DEFAULT NULL,
-  `personcol` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`person_id`),
   KEY `person_role_idx` (`role_id`),
   CONSTRAINT `personrole` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`) ON DELETE NO ACTION ON UPDATE NO ACTION

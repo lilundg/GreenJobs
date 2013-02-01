@@ -1,21 +1,43 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
     <h:body>
-        <p>Specify time periods you can work</p>
-        <h:form>
-            <h:outputLabel for="from" value="From :"/>
-            <h:inputText id="from" value="#{registrationManager.availableFrom}" required="true"/>
-            <h:outputLabel for="to" value="To :"/>
-            <h:inputText id="to" value="#{registrationManager.availableTo}" required="true"/>
+        <ui:composition template="template.xhtml">
+            <ui:define name="pageTitle">
+                #{msgs['register.title']}
+            </ui:define>
+            <ui:define name="content">
+                <h:form>
+            dd.MM.yyyy
+                    <h:outputLabel for="from" value="From :"/>
+                    <h:inputText id="from" value="#{registrationManager.availableFrom}" required="true">
+                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                    </h:inputText>
 
-            <h:commandButton value="Add" action="#{registrationManager.addAvailability()}"/> <br/>
-            <h:commandButton value="I'm done"/>
+                    <h:outputLabel for="to" value="To :"/>
+                    <h:inputText id="to" value="#{registrationManager.availableTo}" required="true">
+                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                    </h:inputText>
+
+            <h:commandButton value="Add" 
+                             action="#{registrationManager.addAvailability}"/> <br/>
+            <h:commandButton value="#{msgs['nav.nextPage']}" action="register4"/>
+
+            <h:outputText value="Selected areas of expertise"/>
+
+            <h:dataTable value="#{registrationManager.availabilities}" var="item">
+                <h:column>
+
+                    <h:outputText value="#{item}"/>
+                </h:column>
+            </h:dataTable>
+
         </h:form>
+            </ui:define>
+        </ui:composition>
     </h:body>
 </html>
 

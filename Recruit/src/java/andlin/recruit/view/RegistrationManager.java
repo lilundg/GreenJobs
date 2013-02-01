@@ -4,16 +4,18 @@
  */
 package andlin.recruit.view;
 
-import andlin.recruit.controller.PersonFacade;
+import andlin.recruit.controller.ApplicationFacade;
 import andlin.recruit.model.Availability;
+import andlin.recruit.model.AvailabilityDTO;
 import andlin.recruit.model.Competence;
-import andlin.recruit.model.CompetenceProfile;
+import andlin.recruit.model.CompetenceDTO;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.validation.constraints.Max;
 
 /**
  *
@@ -22,53 +24,46 @@ import javax.ejb.EJB;
 @Named(value = "registrationManager")
 @SessionScoped
 public class RegistrationManager implements Serializable {
+    
+    //Controller
     @EJB
-    private PersonFacade personFacade;
+    private ApplicationFacade applicationFacade;
     
     private String firstName;
     private String surName;
+    private String ssn;
     private String email;
     
-    private List<Competence> competenceList;
-    private List<CompetenceProfile> selectedExpertise;
-    private List<Availability> selectedAvailability;
-    
-    private String expertise;
+    private List<CompetenceDTO> competences;
+    private CompetenceDTO competence;
     private String yearsOfExperience;
     
-    private String availableFrom;
-    private String availableTo;
+    private List<AvailabilityDTO> availabilities;
+    private Date availableFrom;
+    private Date availableTo;
     
+    
+    
+    private List<CompetenceDTO> selectedCompetences;  
     
     /**
      * Creates a new instance of RegistrationManager
      */
     public RegistrationManager() {
-        
-    }
-
-    public void createPerson() {
-        personFacade.createPerson(firstName, surName, email);
-    }
-
-    public void addCompetence() {
-        personFacade.addCompetenceProfile(expertise, yearsOfExperience);
     }
     
-        public void addAvailability() {
-        personFacade.addAvailability(availableFrom, availableTo);
-    }
-    
-    public void createCompetence() {
-        personFacade.createCompetence();
+    @PostConstruct
+    public void init() {
+        selectedCompetences = new LinkedList<CompetenceDTO>();
+        competences = applicationFacade.getCompetences();
     }
 
-    public List<Competence> getCompetenceList() {
-        return personFacade.getCompetenceList();
+    public List<CompetenceDTO> getCompetences() {
+        return competences;
     }
 
-    public void setCompetenceList(List<Competence> competenceList) {
-        this.competenceList = competenceList;
+    public void setCompetences(List<CompetenceDTO> competenceList) {
+        this.competences = competenceList;
     }
 
     public String getEmail() {
@@ -95,12 +90,12 @@ public class RegistrationManager implements Serializable {
         this.surName = surName;
     }
 
-    public String getExpertise() {
-        return expertise;
+    public CompetenceDTO getCompetence() {
+        return competence;
     }
 
-    public void setExpertise(String expertise) {
-        this.expertise = expertise;
+    public void setCompetence(CompetenceDTO competence) {
+        this.competence = competence;
     }
 
     public String getYearsOfExperience() {
@@ -111,41 +106,68 @@ public class RegistrationManager implements Serializable {
         this.yearsOfExperience = yearsOfExperience;
     }
 
-    public List<CompetenceProfile> getSelectedExpertise() {
-        
-        selectedExpertise = personFacade.getSelectedExpertise();
-        return selectedExpertise;
-    }
-
-    public void setSelectedExpertise(List<CompetenceProfile> selectedExpertise) {
-        this.selectedExpertise = selectedExpertise;
-    }
-
-    public String getAvailableFrom() {
+    public Date getAvailableFrom() {
         return availableFrom;
     }
 
-    public void setAvailableFrom(String availableFrom) {
+    public void setAvailableFrom(Date availableFrom) {
         this.availableFrom = availableFrom;
     }
 
-    public String getAvailableTo() {
+    public Date getAvailableTo() {
         return availableTo;
     }
 
-    public void setAvailableTo(String availableTo) {
+    public void setAvailableTo(Date availableTo) {
         this.availableTo = availableTo;
     }
 
-    public List<Availability> getSelectedAvailability() {
-        return selectedAvailability;
+    public String createPerson() {
+        applicationFacade.createPerson(firstName, surName, ssn, email);
+        return "register2";
     }
 
-    public void setSelectedAvailability(List<Availability> selectedAvailability) {
-        this.selectedAvailability = selectedAvailability;
+    public void addCompetence() {   
+        applicationFacade.addCompetence(competence,yearsOfExperience);
+
+        //Clear input field
+        yearsOfExperience = "";
+    }
+
+    public String registerApplication() {
+        applicationFacade.registerApplication();
+        return "register";
+    }
+
+    public List<CompetenceDTO> getSelectedCompetences() {
+        return applicationFacade.getSelectedCompetences();
+    }
+
+    public void setSelectedCompetences(List<CompetenceDTO> selectedCompetences) {
+        this.selectedCompetences = selectedCompetences;
     }
     
+    public void addAvailability() {
 
+       applicationFacade.addAvailability(availableFrom, availableTo);       
+        
+    }
+
+    public String getSsn() {
+        return ssn;
+    }
+
+    public void setSsn(String ssn) {
+        this.ssn = ssn;
+    }
+
+    public List<AvailabilityDTO> getAvailabilities() {
+        return applicationFacade.getAvailabilities();
+    }
+
+    public void SetAvailabilities(List<AvailabilityDTO> avail) {
+        this.availabilities = availabilities;
+    }
     
     
 }

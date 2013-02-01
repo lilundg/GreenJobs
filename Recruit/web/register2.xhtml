@@ -2,11 +2,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
     <h:body>
+        <ui:composition template="template.xhtml">
+            <ui:define name="pageTitle">
+                #{msgs['register.title']}
+            </ui:define>
+            <ui:define name="content">
                 <h:form>
             <h:panelGrid>
                 <h:outputLabel id="areaOfExpertiseText" value="Select area of expertise :"/>
@@ -14,19 +17,19 @@
                 <f:view>
                     <h:form>
                         <h:selectOneMenu id="competences"
-                                         value="#{registrationManager.expertise}">
-                            <f:selectItems value="#{registrationManager.competenceList}"/> 
+                                         value="#{registrationManager.competence}" converter="#{competenceConverter}">
+                            <f:selectItems value="#{registrationManager.competences}"/> 
                         </h:selectOneMenu>
               
                     </h:form>
                 </f:view>
                 
                 <h:outputLabel for="yearsOfExperience" value="Years of experience :"/>
-                <h:inputText id="yearsOfExperience" value="#{registrationManager.yearsOfExperience}" required="true"/>
+                <h:inputText id="yearsOfExperience" value="#{registrationManager.yearsOfExperience}"/>
                 <h:message for="yearsOfExperience"/>
                 
                 <h:commandButton value="Add" action="#{registrationManager.addCompetence}"/>
-                <h:commandButton value="Continue" action="#{registrationManager.createCompetence}"/>
+                <h:commandButton value="#{msgs['nav.nextPage']}" action="register3"/>
                 
             </h:panelGrid>      
                     
@@ -35,36 +38,19 @@
         <f:view>
             <h:form>
                 <h:outputText value="Selected areas of expertise"/>
-                <h:dataTable value="#{registrationManager.selectedExpertise}" var="item">
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="CompetenceProfileId"/>
-                        </f:facet>
-                        <h:outputText value="#{item.competenceProfileId}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="PersonId"/>
-                        </f:facet>
-                        <h:outputText value="#{item.personId}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="CompetenceId"/>
-                        </f:facet>
-                        <h:outputText value="#{item.competenceId}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="YearsOfExperience"/>
-                        </f:facet>
-                        <h:outputText value="#{item.yearsOfExperience}"/>
-                    </h:column>
-                </h:dataTable>
-            </h:form>
-        </f:view>
+                <h:form>
+                    <h:dataTable value="#{registrationManager.selectedCompetences}" var="item">
+                        <h:column>
+   
+                            <h:outputText value="#{item}"/>
+                        </h:column>
+                    </h:dataTable>
+                </h:form>
 
-        
+               </h:form>
+                    </f:view>
+
+            </ui:define>
+        </ui:composition>
     </h:body>
 </html>
-

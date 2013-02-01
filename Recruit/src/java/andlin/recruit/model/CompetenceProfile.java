@@ -6,7 +6,6 @@ package andlin.recruit.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -21,29 +20,37 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "CompetenceProfile.findAll", query = "SELECT c FROM CompetenceProfile c"),
     @NamedQuery(name = "CompetenceProfile.findByCompetenceProfileId", query = "SELECT c FROM CompetenceProfile c WHERE c.competenceProfileId = :competenceProfileId"),
-    @NamedQuery(name = "CompetenceProfile.findByPersonId", query = "SELECT c FROM CompetenceProfile c WHERE c.personId = :personId"),
-    @NamedQuery(name = "CompetenceProfile.findByCompetenceId", query = "SELECT c FROM CompetenceProfile c WHERE c.competenceId = :competenceId"),
     @NamedQuery(name = "CompetenceProfile.findByYearsOfExperience", query = "SELECT c FROM CompetenceProfile c WHERE c.yearsOfExperience = :yearsOfExperience")})
 public class CompetenceProfile implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @NotNull
     @Column(name = "competence_profile_id")
     private Long competenceProfileId;
-    @Column(name = "person_id")
-    private BigInteger personId;
-    @Column(name = "competence_id")
-    private BigInteger competenceId;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "years_of_experience")
     private BigDecimal yearsOfExperience;
+    @JoinColumn(name = "person_id", referencedColumnName = "person_id")
+    @ManyToOne(optional = false)
+    private Person personId;
+    @JoinColumn(name = "competence_id", referencedColumnName = "competence_id")
+    @ManyToOne(optional = false)
+    private Competence competenceId;
 
     public CompetenceProfile() {
     }
 
     public CompetenceProfile(Long competenceProfileId) {
         this.competenceProfileId = competenceProfileId;
+    }
+
+    public CompetenceProfile(Long competenceProfileId, BigDecimal yearsOfExperience) {
+        this.competenceProfileId = competenceProfileId;
+        this.yearsOfExperience = yearsOfExperience;
     }
 
     public Long getCompetenceProfileId() {
@@ -54,28 +61,28 @@ public class CompetenceProfile implements Serializable {
         this.competenceProfileId = competenceProfileId;
     }
 
-    public BigInteger getPersonId() {
-        return personId;
-    }
-
-    public void setPersonId(BigInteger personId) {
-        this.personId = personId;
-    }
-
-    public BigInteger getCompetenceId() {
-        return competenceId;
-    }
-
-    public void setCompetenceId(BigInteger competenceId) {
-        this.competenceId = competenceId;
-    }
-
     public BigDecimal getYearsOfExperience() {
         return yearsOfExperience;
     }
 
     public void setYearsOfExperience(BigDecimal yearsOfExperience) {
         this.yearsOfExperience = yearsOfExperience;
+    }
+
+    public Person getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(Person personId) {
+        this.personId = personId;
+    }
+
+    public Competence getCompetenceId() {
+        return competenceId;
+    }
+
+    public void setCompetenceId(Competence competenceId) {
+        this.competenceId = competenceId;
     }
 
     @Override
@@ -100,7 +107,7 @@ public class CompetenceProfile implements Serializable {
 
     @Override
     public String toString() {
-        return "andlin.recruit.view.CompetenceProfile[ competenceProfileId=" + competenceProfileId + " ]";
+        return "andlin.recruit.model.CompetenceProfile[ competenceProfileId=" + competenceProfileId + " ]";
     }
     
 }

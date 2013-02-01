@@ -4,87 +4,191 @@
  */
 package andlin.recruit.controller;
 
-import andlin.recruit.model.Competence;
-import andlin.recruit.model.CompetenceProfile;
-import javax.ejb.Stateful;
+import andlin.recruit.model.*;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import andlin.recruit.model.Person;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import javax.persistence.NoResultException;
 
 /**
  *
- * @author pinballmilitia
+ * @author Andlind
  */
 @Stateless
 @LocalBean
-public class PersonFacade {
-    
-    private List<CompetenceProfile> competence_profile;
-    
-    @PersistenceContext(unitName = "RecruitPU2")
+public class ApplicationFacade {
+
+    private Person person;
+    private List<Competence> competences;
+    private List<CompetenceProfile> competenceProfiles;
+    private List<Availability> availabilities;
+    @PersistenceContext(unitName = "RecruitPU")
     private EntityManager em;
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
-
-    public void createPerson(String firstName, String surName, String email) {
-        Person person = new Person();
-        person.setName(firstName);
-        person.setSurname(surName);
-        person.setEmail(email);
-        person.setPersonId(Long.MIN_VALUE);
-        em.persist(person);
-    }
-    
-    
-
+    /**
+     *
+     * @param object
+     */
     public void persist(Object object) {
         em.persist(object);
-        
+
     }
 
-    public List<Competence> getCompetenceList() {
-        Query query = em.createNamedQuery("Competence.findAll");
-        return query.getResultList();
-    }
-
-    
-    //Hårdkodat - anropas när användaren väljer en kompetens och erfarenhetstid
-    public void addCompetenceProfile(String expertise, String yearsOfExperience) {
-        if (competence_profile == null) {
-            competence_profile = new LinkedList<CompetenceProfile>();
+    /**
+     *
+     * @param name
+     * @param surName
+     * @param ssn
+     * @param email
+     */
+    public void createPerson(String name, String surName, String ssn, String email) {
+        if (person == null) {
+            person = new Person();
         }
-        
-        CompetenceProfile profile = new CompetenceProfile();
-        
-        //TODO figure out how to get hold of Competence id 
-        profile.setCompetenceId(BigInteger.ZERO);
-        profile.setYearsOfExperience(new BigDecimal(20));
-        
-        competence_profile.add(profile);
+        person.setName(name);
+        person.setSurname(surName);
+        person.setSsn(ssn);
+        person.setEmail(email);
+
+        //Applicant is jobseeker
+        Role role = (Role) em.createNamedQuery("Role.findByName").setParameter("name", "jobseeker").getSingleResult();
+        person.setRoleId(role);
     }
 
-    //Denna metod anropas när användaren är klar med att lägga till kompetens/expertis 
-    public void createCompetence() {
-        
-        //Vilkor för att gå vidare till nästa vy?
-        //Maybe final check here?
-        if(true)
-            return;
+    /**
+     * Sets time periods jobseeker is able to work
+     *
+     * @param fromDate start of time period
+     * @param toDate end of time period
+     */
+    public void addAvailability(Date fromDate, Date toDate) {
+
+        if (availabilities == null) {
+            availabilities = new LinkedList<Availability>();
+        }
+
+        Availability availability = new Availability();
+        availability.setFromDate(fromDate);
+        availability.setToDate(toDate);
+        availability.setPersonId(person);
+
+        availabilities.add(availability);
     }
 
-    public List<CompetenceProfile> getSelectedExpertise() {
-        return competence_profile;
+    /**
+     *
+     * @return
+     */
+    public List<AvailabilityDTO> getAvailabilities() {
+
+        return (List<AvailabilityDTO>) (List<?>) availabilities;
+
     }
 
-    public void addAvailability(String availableFrom, String availableTo) {
-        
+    /**
+     *
+     * @param competence
+     * @param yearsOfExperience
+     */
+    public void addCompetence(CompetenceDTO competenceDTO, String yearsOfExperience) {
+        if (competences == null) {
+            competences = new LinkedList<Competence>();
+        }
+
+        Competence competence = new Competence();
+        competence.setCompetenceId(competenceDTO.getCompetenceId());
+        competence.setName(competenceDTO.getName());
+
+        competences.add(competence);
+
+        addCompetenceProfile(competence, yearsOfExperience);
+    }
+
+    /**
+     *
+     * @param comp
+     * @param yearsOfExperience
+     */
+    public void addCompetenceProfile(Competence competence, String yearsOfExperience) {
+        if (competenceProfiles == null) {
+            competenceProfiles = new LinkedList<CompetenceProfile>();
+        }
+
+        //CompetenceProfile competenceProfile = null;
+        //Query query = null;
+
+        //query = em.createNamedQuery("Competence.findByName").setParameter("name", comp.getName());
+
+        //Competence competence = (Competence) query.getSingleResult();
+
+        CompetenceProfile competenceProfile = new CompetenceProfile();
+        competenceProfile.setCompetenceId(competence);
+        competenceProfile.setYearsOfExperience(new BigDecimal(yearsOfExperience));
+        competenceProfile.setPersonId(person);
+
+        competenceProfiles.add(competenceProfile);
+    }
+
+    /**
+     *
+     * @param firstName
+     * @param surName
+     * @param email
+     * @param selectedExpertise
+     * @param selectedAvailability
+     */
+    public void registerApplication() {
+        person.setCompetenceProfileCollection(competenceProfiles);
+        person.setAvailabilityCollection(availabilities);
+        persist(person);
+
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<CompetenceDTO> getCompetences() {
+
+        Query query = em.createNamedQuery("Competence.findAll");
+
+        try {
+            return (List<CompetenceDTO>) query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Returns a list of CompetenceDTO objects representing the Component
+     * objects selected by user
+     * @return List of CompetenceDTO objects
+     */
+    public List<CompetenceDTO> getSelectedCompetences() {
+
+        return (List<CompetenceDTO>) (List<?>) competences;
+    }
+
+    /**
+     * Returns an instance of 'Competence' with name attribute == 'name' or null
+     * if no such Competence objects exists.
+     *
+     * @param name name attribute of Competence object
+     * @return Competence instance or null if no matching instance found
+     */
+    public CompetenceDTO findCompetenceByName(String name) {
+
+        Query query = em.createNamedQuery("Competence.findByName").setParameter("name", name);
+
+        try {
+            return (CompetenceDTO) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

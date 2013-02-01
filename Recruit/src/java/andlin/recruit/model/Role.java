@@ -5,10 +5,12 @@
 package andlin.recruit.model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -24,19 +26,29 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Role implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @NotNull
     @Column(name = "role_id")
     private Long roleId;
-    @Size(max = 255)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
     @Column(name = "name")
     private String name;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "roleId")
+    private Collection<Person> personCollection;
 
     public Role() {
     }
 
     public Role(Long roleId) {
         this.roleId = roleId;
+    }
+
+    public Role(Long roleId, String name) {
+        this.roleId = roleId;
+        this.name = name;
     }
 
     public Long getRoleId() {
@@ -53,6 +65,15 @@ public class Role implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @XmlTransient
+    public Collection<Person> getPersonCollection() {
+        return personCollection;
+    }
+
+    public void setPersonCollection(Collection<Person> personCollection) {
+        this.personCollection = personCollection;
     }
 
     @Override
@@ -77,7 +98,7 @@ public class Role implements Serializable {
 
     @Override
     public String toString() {
-        return "andlin.recruit.view.Role[ roleId=" + roleId + " ]";
+        return "andlin.recruit.model.Role[ roleId=" + roleId + " ]";
     }
     
 }

@@ -14,12 +14,19 @@
                         <h:outputLabel for="firstName" value="#{msgs['register.firstName']} :"/>
                         <h:inputText id="firstName" value="#{registrationManager.firstName}" required="true"/>
                         <h:message for="firstName"/>
+                        
                         <h:outputLabel for="lastName"  value="#{msgs['register.lastName']} :"/>
                         <h:inputText id="lastName" value="#{registrationManager.surName}" required="true"/>
                         <h:message for="lastName"/>
+                        
+                        <h:outputLabel for="ssn"  value="#{msgs['register.ssn']} :"/>
+                        <h:inputText id="ssn" value="#{registrationManager.ssn}" required="true"/>
+                        <h:message for="ssn"/>
+                                             
                         <h:outputLabel for="email"  value="#{msgs['register.email']} :"/>
                         <h:inputText id="email" value="#{registrationManager.email}" required="true"/>
                         <h:message for="email"/>
+                        
                         <h:commandButton value="#{msgs['nav.nextPage']}" action="#{registrationManager.createPerson}"/>           
                     </h:panelGrid>
                 </h:form>
