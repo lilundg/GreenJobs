@@ -172,6 +172,8 @@ public class ApplicationFacade {
         person.setCompetenceProfileCollection(competenceProfileList);
         person.setAvailabilityCollection(availabilityList);
         persist(person);
+        
+        //We are done with registration, invalidate session.
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
     }
 
