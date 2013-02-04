@@ -54,3 +54,7 @@ body{
 #footer{
     
 }
+
+.ui-widget{
+    font-size:12px;
+}
