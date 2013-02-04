@@ -40,11 +40,13 @@ public class RegistrationManager implements Serializable {
     private String surName;
     @NotNull
     private String ssn;
-    @NotNull
-    @ValidEmail
+    //@NotNull
+    //@ValidEmail
     private String email;
     private List<CompetenceDTO> competences;
     private CompetenceDTO competence;
+    @NotNull
+    @Size(min = 0, max = 99, message = "{register.years.size}")
     private String yearsOfExperience;
     private List<AvailabilityDTO> availabilities;
     private Date availableFrom;
@@ -131,8 +133,7 @@ public class RegistrationManager implements Serializable {
     }
 
     public String createPerson() {
-        applicationFacade.createPerson(firstName, surName, ssn, email);
-        return "register2";
+        return applicationFacade.createPerson(firstName, surName, ssn, email);
     }
 
     public void addCompetence() {   
@@ -140,6 +141,10 @@ public class RegistrationManager implements Serializable {
 
         //Clear input field
         yearsOfExperience = "";
+    }
+
+    public String doneAddingCompetence() {
+        return applicationFacade.doneAddingCompetence();
     }
 
     public String registerApplication() {

@@ -4,6 +4,7 @@
  */
 package andlin.recruit.model;
 
+import andlin.recruit.validation.ValidEmail;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.*;
@@ -33,7 +34,7 @@ public class Person implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
+    //@NotNull
     @Column(name = "person_id")
     private Long personId;
     @Basic(optional = false)

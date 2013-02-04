@@ -29,7 +29,7 @@ public class Competence implements CompetenceDTO, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
+    //@NotNull
     @Column(name = "competence_id")
     private Long competenceId;
     @Basic(optional = false)

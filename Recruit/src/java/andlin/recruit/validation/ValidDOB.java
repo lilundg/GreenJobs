@@ -17,9 +17,9 @@ import javax.validation.Payload;
 
 @Constraint(validatedBy = EmailValidator.class)
 @Documented
-@Target({ANNOTATION_TYPE, METHOD, FIELD, PARAMETER})
+@Target({ANNOTATION_TYPE, METHOD, FIELD})
 @Retention(RUNTIME)
-public @interface ValidEmail {
+public @interface ValidDOB {
     String message() default "{register.email}";
     java.lang.Class<?>[] groups() default {};
     java.lang.Class<? extends Payload>[] payload() default {};

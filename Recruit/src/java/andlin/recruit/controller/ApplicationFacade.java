@@ -7,16 +7,23 @@ package andlin.recruit.controller;
 import andlin.recruit.model.dto.CompetenceDTO;
 import andlin.recruit.model.dto.AvailabilityDTO;
 import andlin.recruit.model.*;
+import andlin.recruit.validation.ValidEmail;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ResourceBundle;
 import javax.ejb.LocalBean;
+import javax.ejb.Remove;
 import javax.ejb.Stateful;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -49,7 +56,8 @@ public class ApplicationFacade {
      * @param ssn
      * @param email
      */
-    public void createPerson(String name, String surName, String ssn, String email) {
+    public String createPerson(String name, String surName, String ssn, String email) {
+        
         if (person == null) {
             person = new Person();
         }
@@ -58,9 +66,12 @@ public class ApplicationFacade {
         person.setSsn(ssn);
         person.setEmail(email);
 
-        //Applicant is jobseeker
-        Role role = (Role) em.createNamedQuery("Role.findByName").setParameter("name", "jobseeker").getSingleResult();
+        Role role = (Role) em.createNamedQuery("Role.findByName").setParameter("name", "job_seeker").getSingleResult();
+        
         person.setRoleId(role);
+
+        return "register2";
+
     }
 
     /**
@@ -112,6 +123,25 @@ public class ApplicationFacade {
         }
     }
 
+    public String doneAddingCompetence() {
+
+        //User must select atleast one competence
+        if (selectedCompetenceList == null) {
+            
+            ResourceBundle res =  ResourceBundle.getBundle("ValidationMessages");
+            String errmess = res.getString("register.competence.size");
+            FacesMessage fm = new FacesMessage(errmess);
+            fm.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage(null, fm);
+            return null;
+        } else {
+            return "register3";
+        }
+            
+            
+    }
+    
+
     /**
      *
      * @param comp
@@ -137,11 +167,12 @@ public class ApplicationFacade {
      * @param email
      * @param selectedExpertise
      * @param selectedAvailability
-     */
+     */   
     public void registerApplication() {
         person.setCompetenceProfileCollection(competenceProfileList);
         person.setAvailabilityCollection(availabilityList);
         persist(person);
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
     }
 
     /**
@@ -186,4 +217,6 @@ public class ApplicationFacade {
             return null;
         }
     }
+
+
 }
