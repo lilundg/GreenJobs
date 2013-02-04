@@ -6,9 +6,10 @@ package andlin.recruit.view;
 
 import andlin.recruit.controller.ApplicationFacade;
 import andlin.recruit.model.Availability;
-import andlin.recruit.model.AvailabilityDTO;
+import andlin.recruit.model.dto.AvailabilityDTO;
 import andlin.recruit.model.Competence;
-import andlin.recruit.model.CompetenceDTO;
+import andlin.recruit.model.dto.CompetenceDTO;
+import andlin.recruit.validation.ValidEmail;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -16,6 +17,9 @@ import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.ws.rs.FormParam;
 
 /**
  *
@@ -24,20 +28,24 @@ import javax.validation.constraints.Max;
 @Named(value = "registrationManager")
 @SessionScoped
 public class RegistrationManager implements Serializable {
-    
+
     //Controller
     @EJB
     private ApplicationFacade applicationFacade;
-    
+    @NotNull
+    @Size(min = 2, max = 255, message = "{register.firstName.size}")
     private String firstName;
+    @NotNull
+    @Size(min = 2, max = 255, message = "{register.surName.size}")
     private String surName;
+    @NotNull
     private String ssn;
+    @NotNull
+    @ValidEmail
     private String email;
-    
     private List<CompetenceDTO> competences;
     private CompetenceDTO competence;
     private String yearsOfExperience;
-    
     private List<AvailabilityDTO> availabilities;
     private Date availableFrom;
     private Date availableTo;
@@ -136,7 +144,7 @@ public class RegistrationManager implements Serializable {
 
     public String registerApplication() {
         applicationFacade.registerApplication();
-        return "register";
+        return "registration_success";
     }
 
     public List<CompetenceDTO> getSelectedCompetences() {

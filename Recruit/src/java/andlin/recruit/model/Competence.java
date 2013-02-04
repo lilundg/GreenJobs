@@ -4,6 +4,7 @@
  */
 package andlin.recruit.model;
 
+import andlin.recruit.model.dto.CompetenceDTO;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.*;

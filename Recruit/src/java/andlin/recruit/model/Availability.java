@@ -4,6 +4,7 @@
  */
 package andlin.recruit.model;
 
+import andlin.recruit.model.dto.AvailabilityDTO;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;

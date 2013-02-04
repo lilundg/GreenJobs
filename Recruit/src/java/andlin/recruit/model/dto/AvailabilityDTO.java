@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package andlin.recruit.model;
+package andlin.recruit.model.dto;
 
+import andlin.recruit.model.Person;
 import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

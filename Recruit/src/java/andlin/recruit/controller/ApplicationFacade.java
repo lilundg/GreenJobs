@@ -4,29 +4,32 @@
  */
 package andlin.recruit.controller;
 
+import andlin.recruit.model.dto.CompetenceDTO;
+import andlin.recruit.model.dto.AvailabilityDTO;
 import andlin.recruit.model.*;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.*;
-import javax.persistence.NoResultException;
 
 /**
  *
  * @author Andlind
  */
-@Stateless
+@Stateful
 @LocalBean
 public class ApplicationFacade {
 
     private Person person;
-    private List<Competence> competences;
-    private List<CompetenceProfile> competenceProfiles;
-    private List<Availability> availabilities;
+    private List<Competence> selectedCompetenceList;
+    private List<CompetenceProfile> competenceProfileList;
+    private List<Availability> availabilityList;
     @PersistenceContext(unitName = "RecruitPU")
     private EntityManager em;
 
@@ -68,8 +71,8 @@ public class ApplicationFacade {
      */
     public void addAvailability(Date fromDate, Date toDate) {
 
-        if (availabilities == null) {
-            availabilities = new LinkedList<Availability>();
+        if (availabilityList == null) {
+            availabilityList = new LinkedList<Availability>();
         }
 
         Availability availability = new Availability();
@@ -77,7 +80,7 @@ public class ApplicationFacade {
         availability.setToDate(toDate);
         availability.setPersonId(person);
 
-        availabilities.add(availability);
+        availabilityList.add(availability);
     }
 
     /**
@@ -85,9 +88,7 @@ public class ApplicationFacade {
      * @return
      */
     public List<AvailabilityDTO> getAvailabilities() {
-
-        return (List<AvailabilityDTO>) (List<?>) availabilities;
-
+        return (List<AvailabilityDTO>) (List<?>) availabilityList;
     }
 
     /**
@@ -96,17 +97,19 @@ public class ApplicationFacade {
      * @param yearsOfExperience
      */
     public void addCompetence(CompetenceDTO competenceDTO, String yearsOfExperience) {
-        if (competences == null) {
-            competences = new LinkedList<Competence>();
+        if (selectedCompetenceList == null) {
+            selectedCompetenceList = new LinkedList<Competence>();
         }
 
         Competence competence = new Competence();
         competence.setCompetenceId(competenceDTO.getCompetenceId());
         competence.setName(competenceDTO.getName());
 
-        competences.add(competence);
-
-        addCompetenceProfile(competence, yearsOfExperience);
+        //If not already selected
+        if (!selectedCompetenceList.contains(competence)) {
+            selectedCompetenceList.add(competence);
+            addCompetenceProfile(competence, yearsOfExperience);
+        }
     }
 
     /**
@@ -115,23 +118,16 @@ public class ApplicationFacade {
      * @param yearsOfExperience
      */
     public void addCompetenceProfile(Competence competence, String yearsOfExperience) {
-        if (competenceProfiles == null) {
-            competenceProfiles = new LinkedList<CompetenceProfile>();
+        if (competenceProfileList == null) {
+            competenceProfileList = new LinkedList<CompetenceProfile>();
         }
-
-        //CompetenceProfile competenceProfile = null;
-        //Query query = null;
-
-        //query = em.createNamedQuery("Competence.findByName").setParameter("name", comp.getName());
-
-        //Competence competence = (Competence) query.getSingleResult();
 
         CompetenceProfile competenceProfile = new CompetenceProfile();
         competenceProfile.setCompetenceId(competence);
         competenceProfile.setYearsOfExperience(new BigDecimal(yearsOfExperience));
         competenceProfile.setPersonId(person);
 
-        competenceProfiles.add(competenceProfile);
+        competenceProfileList.add(competenceProfile);
     }
 
     /**
@@ -143,10 +139,9 @@ public class ApplicationFacade {
      * @param selectedAvailability
      */
     public void registerApplication() {
-        person.setCompetenceProfileCollection(competenceProfiles);
-        person.setAvailabilityCollection(availabilities);
+        person.setCompetenceProfileCollection(competenceProfileList);
+        person.setAvailabilityCollection(availabilityList);
         persist(person);
-
     }
 
     /**
@@ -167,11 +162,11 @@ public class ApplicationFacade {
     /**
      * Returns a list of CompetenceDTO objects representing the Component
      * objects selected by user
+     *
      * @return List of CompetenceDTO objects
      */
     public List<CompetenceDTO> getSelectedCompetences() {
-
-        return (List<CompetenceDTO>) (List<?>) competences;
+        return (List<CompetenceDTO>) (List<?>) selectedCompetenceList;
     }
 
     /**
