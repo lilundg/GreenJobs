@@ -24,7 +24,7 @@
 
             <h:commandButton value="Add" 
                              action="#{registrationManager.addAvailability}"/> <br/>
-            <h:commandButton value="#{msgs['nav.nextPage']}" action="register4"/>
+            <h:commandButton value="#{msgs['nav.nextPage']}" action="#{registrationManager.doneAddAvailability}"/>
 
             <h:outputText value="Selected areas of expertise"/>
 

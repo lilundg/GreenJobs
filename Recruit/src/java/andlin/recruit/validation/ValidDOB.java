@@ -1,6 +1,5 @@
 package andlin.recruit.validation;
 
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -15,12 +14,15 @@ import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
 import javax.validation.Payload;
 
-@Constraint(validatedBy = EmailValidator.class)
+@Constraint(validatedBy = DOBValidator.class)
 @Documented
 @Target({ANNOTATION_TYPE, METHOD, FIELD})
 @Retention(RUNTIME)
 public @interface ValidDOB {
-    String message() default "{register.email}";
+
+    String message() default "{register.dateOfBirth.format}";
+
     java.lang.Class<?>[] groups() default {};
+
     java.lang.Class<? extends Payload>[] payload() default {};
 }

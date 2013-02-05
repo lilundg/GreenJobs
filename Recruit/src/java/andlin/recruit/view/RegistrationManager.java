@@ -9,6 +9,7 @@ import andlin.recruit.model.Availability;
 import andlin.recruit.model.dto.AvailabilityDTO;
 import andlin.recruit.model.Competence;
 import andlin.recruit.model.dto.CompetenceDTO;
+import andlin.recruit.validation.ValidDOB;
 import andlin.recruit.validation.ValidEmail;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -16,6 +17,7 @@ import java.io.Serializable;
 import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -38,14 +40,13 @@ public class RegistrationManager implements Serializable {
     @NotNull
     @Size(min = 2, max = 255, message = "{register.surName.size}")
     private String surName;
-    @NotNull
-    private String ssn;
-    //@NotNull
-    //@ValidEmail
+    @ValidDOB
+    private String dateOfBirth;
+    @ValidEmail
     private String email;
     private List<CompetenceDTO> competences;
     private CompetenceDTO competence;
-    @NotNull
+    @NotNull(message = "{register.years.empty}")
     @Size(min = 0, max = 99, message = "{register.years.size}")
     private String yearsOfExperience;
     private List<AvailabilityDTO> availabilities;
@@ -133,7 +134,7 @@ public class RegistrationManager implements Serializable {
     }
 
     public String createPerson() {
-        return applicationFacade.createPerson(firstName, surName, ssn, email);
+        return applicationFacade.createPerson(firstName, surName, dateOfBirth, email);
     }
 
     public void addCompetence() {   
@@ -143,13 +144,12 @@ public class RegistrationManager implements Serializable {
         yearsOfExperience = "";
     }
 
-    public String doneAddingCompetence() {
-        return applicationFacade.doneAddingCompetence();
+    public String doneAddCompetence() {
+        return applicationFacade.doneAddCompetence();
     }
 
     public String registerApplication() {
-        applicationFacade.registerApplication();
-        return "registration_success";
+        return applicationFacade.registerApplication();
     }
 
     public List<CompetenceDTO> getSelectedCompetences() {
@@ -165,13 +165,19 @@ public class RegistrationManager implements Serializable {
        applicationFacade.addAvailability(availableFrom, availableTo);       
         
     }
+    
+    public String doneAddAvailability() {
 
-    public String getSsn() {
-        return ssn;
+       return applicationFacade.doneAddAvailability();       
+        
     }
 
-    public void setSsn(String ssn) {
-        this.ssn = ssn;
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public List<AvailabilityDTO> getAvailabilities() {

@@ -7,14 +7,12 @@ package andlin.recruit.controller;
 import andlin.recruit.model.dto.CompetenceDTO;
 import andlin.recruit.model.dto.AvailabilityDTO;
 import andlin.recruit.model.*;
-import andlin.recruit.validation.ValidEmail;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.ejb.LocalBean;
-import javax.ejb.Remove;
 import javax.ejb.Stateful;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -22,8 +20,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -53,21 +49,21 @@ public class ApplicationFacade {
      *
      * @param name
      * @param surName
-     * @param ssn
+     * @param dateOfBirth
      * @param email
      */
-    public String createPerson(String name, String surName, String ssn, String email) {
-        
+    public String createPerson(String name, String surName, String dateOfBirth, String email) {
+
         if (person == null) {
             person = new Person();
         }
         person.setName(name);
         person.setSurname(surName);
-        person.setSsn(ssn);
+        person.setSsn(dateOfBirth);
         person.setEmail(email);
 
         Role role = (Role) em.createNamedQuery("Role.findByName").setParameter("name", "job_seeker").getSingleResult();
-        
+
         person.setRoleId(role);
 
         return "register2";
@@ -92,6 +88,21 @@ public class ApplicationFacade {
         availability.setPersonId(person);
 
         availabilityList.add(availability);
+    }
+
+    public String doneAddAvailability() {
+        //User must provide one time period
+        if (availabilityList == null) {
+
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("ValidationMessages");
+            String error_message = resourceBundle.getString("register.availability.size");
+            FacesMessage fm = new FacesMessage(error_message);
+            fm.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage(null, fm);
+            return null;
+        } else {
+            return "register4";
+        }
     }
 
     /**
@@ -123,24 +134,23 @@ public class ApplicationFacade {
         }
     }
 
-    public String doneAddingCompetence() {
+    public String doneAddCompetence() {
 
         //User must select atleast one competence
         if (selectedCompetenceList == null) {
-            
-            ResourceBundle res =  ResourceBundle.getBundle("ValidationMessages");
-            String errmess = res.getString("register.competence.size");
-            FacesMessage fm = new FacesMessage(errmess);
+
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("ValidationMessages");
+            String error_message = resourceBundle.getString("register.competence.size");
+            FacesMessage fm = new FacesMessage(error_message);
             fm.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage(null, fm);
             return null;
         } else {
             return "register3";
         }
-            
-            
+
+
     }
-    
 
     /**
      *
@@ -167,14 +177,16 @@ public class ApplicationFacade {
      * @param email
      * @param selectedExpertise
      * @param selectedAvailability
-     */   
-    public void registerApplication() {
+     */
+    public String registerApplication() {
         person.setCompetenceProfileCollection(competenceProfileList);
         person.setAvailabilityCollection(availabilityList);
         persist(person);
-        
+
         //We are done with registration, invalidate session.
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+
+        return "registration_success";
     }
 
     /**
@@ -219,6 +231,4 @@ public class ApplicationFacade {
             return null;
         }
     }
-
-
 }

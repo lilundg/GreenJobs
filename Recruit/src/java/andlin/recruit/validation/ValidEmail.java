@@ -1,6 +1,5 @@
 package andlin.recruit.validation;
 
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -20,7 +19,10 @@ import javax.validation.Payload;
 @Target({ANNOTATION_TYPE, METHOD, FIELD, PARAMETER})
 @Retention(RUNTIME)
 public @interface ValidEmail {
-    String message() default "{register.email}";
+
+    String message() default "{register.email.format}";
+
     java.lang.Class<?>[] groups() default {};
+
     java.lang.Class<? extends Payload>[] payload() default {};
 }

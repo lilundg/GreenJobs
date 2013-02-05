@@ -10,17 +10,15 @@ import java.util.regex.Pattern;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
+public class DOBValidator implements ConstraintValidator<ValidDOB, String> {
 
     private Pattern pattern;
     private Matcher matcher;
-    private final String EMAIL_PATTERN =
-            "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-            + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+    private final String DOB_PATTERN = "^\\d{6}$";
 
     @Override
-    public void initialize(ValidEmail constraintAnnotation) {
-        pattern = Pattern.compile(EMAIL_PATTERN);
+    public void initialize(ValidDOB constraintAnnotation) {
+        pattern = Pattern.compile(DOB_PATTERN);
     }
 
     @Override

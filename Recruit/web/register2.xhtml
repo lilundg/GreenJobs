@@ -29,12 +29,16 @@
                 <h:message for="yearsOfExperience"/>
                 
                 <h:commandButton value="Add" action="#{registrationManager.addCompetence}"/>
-                <h:commandButton value="#{msgs['nav.nextPage']}" action="register3"/>
+                
                 
             </h:panelGrid>      
                     
+                   
             
         </h:form>
+                
+                 <h:form><h:commandButton value="#{msgs['nav.nextPage']}" action="#{registrationManager.doneAddCompetence}"/></h:form>
+                
         <f:view>
             <h:form>
                 <h:outputText value="Selected areas of expertise"/>
