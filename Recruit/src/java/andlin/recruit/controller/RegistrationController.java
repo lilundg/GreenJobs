@@ -4,9 +4,9 @@
  */
 package andlin.recruit.controller;
 
-import andlin.recruit.model.dto.CompetenceDTO;
-import andlin.recruit.model.dto.AvailabilityDTO;
 import andlin.recruit.model.*;
+import andlin.recruit.model.dto.AvailabilityDTO;
+import andlin.recruit.model.dto.CompetenceDTO;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.LinkedList;
@@ -16,7 +16,10 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -24,7 +27,7 @@ import javax.persistence.*;
  */
 @Stateful
 @LocalBean
-public class ApplicationFacade {
+public class RegistrationController {
 
     private Person person;
     private List<Competence> selectedCompetenceList;
@@ -43,7 +46,7 @@ public class ApplicationFacade {
     }
 
     /**
-     *
+     * 
      * @param name
      * @param surName
      * @param ssn
@@ -54,12 +57,13 @@ public class ApplicationFacade {
         if (person == null) {
             person = new Person();
         }
+        
         person.setName(name);
         person.setSurname(surName);
         person.setSsn(ssn);
         person.setEmail(email);
 
-        Role role = null;
+        Role role;
         try {
             role = (Role) em.createNamedQuery("Role.findByName").setParameter("name", "job_seeker").getSingleResult();
         } catch (NoResultException e) {
@@ -80,7 +84,6 @@ public class ApplicationFacade {
      * @param toDate end of time period
      */
     public void addAvailability(Date fromDate, Date toDate) {
-
         if (availabilityList == null) {
             availabilityList = new LinkedList<Availability>();
         }
@@ -94,7 +97,7 @@ public class ApplicationFacade {
     }
 
     public String doneAddAvailability() {
-        //User must provide one time period
+        //User must provide at least one time period
         if (availabilityList == null) {
 
             ResourceBundle resourceBundle = ResourceBundle.getBundle("ValidationMessages");
@@ -102,9 +105,9 @@ public class ApplicationFacade {
             FacesMessage fm = new FacesMessage(error_message);
             fm.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage(null, fm);
-            return null;
+            return "failure";
         } else {
-            return "register4";
+            return "success";
         }
     }
 

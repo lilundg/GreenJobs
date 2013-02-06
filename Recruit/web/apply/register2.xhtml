@@ -11,44 +11,44 @@
             </ui:define>
             <ui:define name="content">
                 <h:form>
-                <h:panelGrid>
-                    <h:outputLabel id="areaOfExpertiseText" value="#{msgs['register.select.expertise']} :"/>
+                    <h:panelGrid>
+                        <h:outputLabel id="areaOfExpertiseText" value="#{msgs['register.select.expertise']} :"/>
 
-                    <f:view>
-                        <h:form>
-                            <h:selectOneMenu id="competences"
-                                             value="#{registrationManager.competence}" converter="#{competenceConverter}">
-                                <f:selectItems value="#{registrationManager.competences}"/> 
-                            </h:selectOneMenu>
+                        <f:view>
+                            <h:form>
+                                <h:selectOneMenu id="competences"
+                                                 value="#{registrationManager.competence}" converter="#{competenceConverter}">
+                                    <f:selectItems value="#{registrationManager.competences}"/> 
+                                </h:selectOneMenu>
 
-                        </h:form>
-                    </f:view>
+                            </h:form>
+                        </f:view>
 
-                    <h:outputLabel for="yearsOfExperience" value="#{msgs['register.yearsofexperience']} :"/>
-                    <h:inputText id="yearsOfExperience" value="#{registrationManager.yearsOfExperience}"/>
-                    <h:message for="yearsOfExperience"/>
+                        <h:outputLabel for="yearsOfExperience" value="#{msgs['register.yearsofexperience']} :"/>
+                        <h:inputText id="yearsOfExperience" value="#{registrationManager.yearsOfExperience}"/>
+                        <h:message for="yearsOfExperience"/>
 
-                    <h:commandButton value="#{msgs['register.button.select']}" action="#{registrationManager.addCompetence}"/>
-                
+                        <h:commandButton value="#{msgs['register.button.select']}" action="#{registrationManager.addCompetence}"/>
 
-                </h:panelGrid>      
-            </h:form>
-                <h:form>
-                <h:commandButton value="#{msgs['nav.nextPage']}" action="#{registrationManager.doneAddCompetence}"/>
+
+                    </h:panelGrid>      
                 </h:form>
-            <f:view>
                 <h:form>
-                    <h:outputText value="#{msgs['register.selected.expertise']} :"/>
+                    <h:commandButton value="#{msgs['nav.nextPage']}" action="#{registrationManager.doneAddCompetence}"/>
+                </h:form>
+                <f:view>
                     <h:form>
-                        <h:dataTable value="#{registrationManager.selectedCompetences}" var="item">
-                            <h:column>
+                        <h:outputText value="#{msgs['register.selected.expertise']} :"/>
+                        <h:form>
+                            <h:dataTable value="#{registrationManager.selectedCompetences}" var="item">
+                                <h:column>
 
-                                <h:outputText value="#{item}"/>
-                            </h:column>
-                        </h:dataTable>
+                                    <h:outputText value="#{item}"/>
+                                </h:column>
+                            </h:dataTable>
+                        </h:form>
+
                     </h:form>
-
-                   </h:form>
                 </f:view>
             </ui:define>
         </ui:composition>

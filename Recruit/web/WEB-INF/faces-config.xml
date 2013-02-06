@@ -24,6 +24,11 @@
             <from-outcome>success</from-outcome>
             <to-view-id>/apply/register2.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-action>#{registrationManager.newPerson}</from-action>
+            <from-outcome>failure</from-outcome>
+            <to-view-id>/apply/register.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
     
     <navigation-rule>
@@ -35,6 +40,20 @@
         </navigation-case>
         <navigation-case>
             <from-action>#{registrationManager.doneAddCompetence}</from-action>
+            <from-outcome>failure</from-outcome>
+            <to-view-id>/apply/register2.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+        <navigation-rule>
+        <from-view-id>/apply/register3.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{registrationManager.doneAddAvailability}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/apply/register4.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{registrationManager.doneAddAvailability}</from-action>
             <from-outcome>failure</from-outcome>
             <to-view-id>/apply/register2.xhtml</to-view-id>
         </navigation-case>

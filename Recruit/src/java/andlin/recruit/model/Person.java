@@ -51,6 +51,7 @@ public class Person implements Serializable {
     @Column(name = "ssn")
     private String ssn;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    @ValidEmail
     @Size(max = 255)
     @Column(name = "email")
     private String email;

@@ -4,24 +4,21 @@
  */
 package andlin.recruit.view;
 
-import andlin.recruit.controller.ApplicationFacade;
-import andlin.recruit.model.Availability;
+import andlin.recruit.controller.RegistrationController;
 import andlin.recruit.model.dto.AvailabilityDTO;
-import andlin.recruit.model.Competence;
 import andlin.recruit.model.dto.CompetenceDTO;
-import andlin.recruit.validation.ValidSSN;
 import andlin.recruit.validation.ValidEmail;
-import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
+import andlin.recruit.validation.ValidSSN;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.Max;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.ws.rs.FormParam;
 
 /**
  *
@@ -31,9 +28,8 @@ import javax.ws.rs.FormParam;
 @SessionScoped
 public class RegistrationManager implements Serializable {
 
-    //Controller
     @EJB
-    private ApplicationFacade applicationFacade;
+    private RegistrationController registrationController;
     @NotNull
     @Size(min = 2, max = 255, message = "{register.firstName.size}")
     private String firstName;
@@ -51,10 +47,7 @@ public class RegistrationManager implements Serializable {
     private String yearsOfExperience;
     private List<AvailabilityDTO> availabilities;
     private Date availableFrom;
-    private Date availableTo;
-    
-    
-    
+    private Date availableTo;   
     private List<CompetenceDTO> selectedCompetences;  
     
     /**
@@ -66,46 +59,40 @@ public class RegistrationManager implements Serializable {
     @PostConstruct
     public void init() {
         selectedCompetences = new LinkedList<CompetenceDTO>();
-        competences = applicationFacade.getCompetences();
+        competences = registrationController.getCompetences();
     }
 
     public String newPerson() {
-        return applicationFacade.newPerson(firstName, surName, ssn, email);
+        return registrationController.newPerson(firstName, surName, ssn, email);
+    }
+
+    public List<CompetenceDTO> getSelectedCompetences() {
+        return registrationController.getSelectedCompetences();
     }
 
     public void addCompetence() {   
-        applicationFacade.addCompetence(competence,yearsOfExperience);
-
-        //Clear input field
+        registrationController.addCompetence(competence, yearsOfExperience);
         yearsOfExperience = "";
     }
 
     public String doneAddCompetence() {
-        return applicationFacade.doneAddCompetence();
-    }
-
-    public String registerApplication() {
-        return applicationFacade.registerApplication();
-    }
-
-    public List<CompetenceDTO> getSelectedCompetences() {
-        return applicationFacade.getSelectedCompetences();
+        return registrationController.doneAddCompetence();
     }
 
     public void setSelectedCompetences(List<CompetenceDTO> selectedCompetences) {
         this.selectedCompetences = selectedCompetences;
     }
-    
+
     public void addAvailability() {
-
-       applicationFacade.addAvailability(availableFrom, availableTo);       
-        
+        registrationController.addAvailability(availableFrom, availableTo);
     }
-    
-    public String doneAddAvailability() {
 
-       return applicationFacade.doneAddAvailability();       
-        
+    public String doneAddAvailability() {
+        return registrationController.doneAddAvailability();
+    }
+
+    public String registerApplication() {
+        return registrationController.registerApplication();
     }
 
     public String getSsn() {
@@ -117,10 +104,10 @@ public class RegistrationManager implements Serializable {
     }
 
     public List<AvailabilityDTO> getAvailabilities() {
-        return applicationFacade.getAvailabilities();
+        return registrationController.getAvailabilities();
     }
 
-    public void SetAvailabilities(List<AvailabilityDTO> avail) {
+    public void SetAvailabilities(List<AvailabilityDTO> availabilities) {
         this.availabilities = availabilities;
     }
     

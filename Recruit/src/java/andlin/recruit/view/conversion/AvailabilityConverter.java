@@ -4,17 +4,16 @@
  */
 package andlin.recruit.view.conversion;
 
-import andlin.recruit.controller.ApplicationFacade;
+import andlin.recruit.controller.RegistrationController;
 import andlin.recruit.model.Competence;
 import javax.ejb.EJB;
-import javax.inject.Named;
-import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
+import javax.inject.Named;
 
 /**
  *
@@ -26,7 +25,7 @@ public class AvailabilityConverter implements Converter {
 
     //Controller
     @EJB
-    private ApplicationFacade personFacade;
+    private RegistrationController personFacade;
 
     /**
      * Creates .a new instance of NewJSFManagedBean

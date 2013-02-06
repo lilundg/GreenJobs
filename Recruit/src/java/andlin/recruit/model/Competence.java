@@ -99,8 +99,6 @@ public class Competence implements CompetenceDTO, Serializable {
 
     @Override
     public String toString() {
-        //Default generated toStrin()
-        //return "andlin.recruit.model.Competence[ competenceId=" + competenceId + " ]";
         return this.getName();
     }
     
