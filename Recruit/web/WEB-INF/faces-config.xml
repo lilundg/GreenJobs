@@ -33,6 +33,11 @@
             <from-outcome>success</from-outcome>
             <to-view-id>/apply/register3.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-action>#{registrationManager.doneAddCompetence}</from-action>
+            <from-outcome>failure</from-outcome>
+            <to-view-id>/apply/register2.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
     
 </faces-config>

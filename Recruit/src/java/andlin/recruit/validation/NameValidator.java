@@ -13,7 +13,6 @@ import javax.validation.ConstraintValidatorContext;
 public class NameValidator implements ConstraintValidator<ValidName, String> {
 
     private Pattern pattern;
-    private Matcher matcher;
     private final String NAME_PATTERN =
             "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
             + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";

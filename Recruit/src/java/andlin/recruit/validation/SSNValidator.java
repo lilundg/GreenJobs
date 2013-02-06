@@ -13,7 +13,6 @@ import javax.validation.ConstraintValidatorContext;
 public class SSNValidator implements ConstraintValidator<ValidSSN, String> {
 
     private Pattern pattern;
-    private Matcher matcher;
     private final String SSN_PATTERN = "^\\d{6}$";
 
     @Override

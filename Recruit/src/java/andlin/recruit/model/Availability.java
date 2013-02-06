@@ -28,7 +28,6 @@ public class Availability implements AvailabilityDTO, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    //@NotNull
     @Column(name = "availability_id")
     private Long availabilityId;
     @Basic(optional = false)

@@ -12,7 +12,6 @@
             </ui:define>
             <ui:define name="content">
                 <h:form>
-            dd-MM-yyyy
                     <!--<h:outputLabel for="from" value="From :"/>
                     <h:inputText id="from" value="#{registrationManager.availableFrom}" required="true">
                         <f:convertDateTime pattern="dd-MM-yyyy" />
@@ -22,25 +21,25 @@
                     <h:inputText id="to" value="#{registrationManager.availableTo}" required="true">
                         <f:convertDateTime pattern="dd-MM-yyyy" />
                     </h:inputText>-->
-                    <h:outputLabel for="from" value="From :" />
+                    <h:outputLabel for="from" value="#{msgs['register.from']} :" />
                     <p:calendar id="from" mode="popup" showOn="button" popupIconOnly="true" pattern="dd-MM-yyyy" navigator="true" value="#{registrationManager.availableFrom}" />
-                    <h:outputLabel for="to" value="To :" />
+                    <h:outputLabel for="to" value="#{msgs['register.to']} :" />
                     <p:calendar id="to" mode="popup" showOn="button" popupIconOnly="true" pattern="dd-MM-yyyy" navigator="true" value="#{registrationManager.availableTo}" />
 
-            <h:commandButton value="Add" 
-                             action="#{registrationManager.addAvailability}"/> <br/>
-            <h:commandButton value="#{msgs['nav.nextPage']}" action="register4"/>
+                    <h:commandButton value="#{msgs['register.button.select']}" 
+                                     action="#{registrationManager.addAvailability}"/> <br/>
+                    <h:commandButton value="#{msgs['nav.nextPage']}" action="register4"/>
 
-            <h:outputText value="Selected areas of expertise"/>
+                    <h:outputText value="#{msgs['register.selected.expertise']} :"/>
 
-            <h:dataTable value="#{registrationManager.availabilities}" var="item">
-                <h:column>
+                    <h:dataTable value="#{registrationManager.availabilities}" var="item">
+                        <h:column>
 
-                    <h:outputText value="#{item}"/>
-                </h:column>
-            </h:dataTable>
+                            <h:outputText value="#{item}"/>
+                        </h:column>
+                    </h:dataTable>
 
-        </h:form>
+                </h:form>
             </ui:define>
         </ui:composition>
     </h:body>

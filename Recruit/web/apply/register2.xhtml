@@ -24,17 +24,18 @@
                         </h:form>
                     </f:view>
 
-                    <h:outputLabel for="yearsOfExperience" value="Years of experience :"/>
+                    <h:outputLabel for="yearsOfExperience" value="#{msgs['register.yearsofexperience']} :"/>
                     <h:inputText id="yearsOfExperience" value="#{registrationManager.yearsOfExperience}"/>
                     <h:message for="yearsOfExperience"/>
 
-                    <h:commandButton value="Add" action="#{registrationManager.addCompetence}"/>
-                    <h:commandButton value="#{msgs['nav.nextPage']}" action="#{registrationManager.doneAddingCompetence}"/>
+                    <h:commandButton value="#{msgs['register.button.select']}" action="#{registrationManager.addCompetence}"/>
+                
 
                 </h:panelGrid>      
-
-
             </h:form>
+                <h:form>
+                <h:commandButton value="#{msgs['nav.nextPage']}" action="#{registrationManager.doneAddCompetence}"/>
+                </h:form>
             <f:view>
                 <h:form>
                     <h:outputText value="#{msgs['register.selected.expertise']} :"/>

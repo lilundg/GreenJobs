@@ -9,13 +9,14 @@
                 #{msgs['register.title']}
             </ui:define>
             <ui:define name="content">
-                <h3>Your information</h3>
                 <h:form>
 
-                    <h:outputText value="#{registrationManager.firstName}"/>
-                    <h:outputText value="#{registrationManager.surName}"/>
-                    <h:outputText value="#{registrationManager.ssn}"/>
-                    <h:outputText value="#{registrationManager.email}"/>
+                    <h:panelGrid>
+                        <h:outputText value="#{registrationManager.firstName}"/>
+                        <h:outputText value="#{registrationManager.surName}"/>
+                        <h:outputText value="#{registrationManager.ssn}"/>
+                        <h:outputText value="#{registrationManager.email}"/>           
+                    </h:panelGrid>
 
                     <h:dataTable value="#{registrationManager.selectedCompetences}" var="item">
                         <h:column>
@@ -31,7 +32,7 @@
                         </h:column>
                     </h:dataTable>
 
-                    <h:commandButton value="Submit" action="#{registrationManager.registerApplication}"/>
+                    <h:commandButton value="#{msgs['register.submit']}" action="#{registrationManager.registerApplication}"/>
                 </h:form>
             </ui:define>
         </ui:composition>

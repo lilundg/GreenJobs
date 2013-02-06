@@ -64,7 +64,7 @@ public class ApplicationFacade {
             role = (Role) em.createNamedQuery("Role.findByName").setParameter("name", "job_seeker").getSingleResult();
         } catch (NoResultException e) {
             //TODO Handle "role not found" in database..... perhaps output = "DB error." 
-            return null;
+            return "failure";
         }
 
         person.setRoleId(role);
@@ -148,7 +148,7 @@ public class ApplicationFacade {
             FacesMessage facesMessage = new FacesMessage(error_message);
             facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-            return null;
+            return "failure";
         } else {
             return "success";
         }

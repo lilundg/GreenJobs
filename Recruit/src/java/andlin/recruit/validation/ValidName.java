@@ -20,7 +20,7 @@ import javax.validation.Payload;
 @Retention(RUNTIME)
 public @interface ValidName {
 
-    String message() default "{register.email.format}";
+    String message() default "{register.name.format}";
 
     java.lang.Class<?>[] groups() default {};
 
