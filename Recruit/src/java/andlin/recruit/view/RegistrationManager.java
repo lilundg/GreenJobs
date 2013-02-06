@@ -9,7 +9,7 @@ import andlin.recruit.model.Availability;
 import andlin.recruit.model.dto.AvailabilityDTO;
 import andlin.recruit.model.Competence;
 import andlin.recruit.model.dto.CompetenceDTO;
-import andlin.recruit.validation.ValidDOB;
+import andlin.recruit.validation.ValidSSN;
 import andlin.recruit.validation.ValidEmail;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -40,8 +40,8 @@ public class RegistrationManager implements Serializable {
     @NotNull
     @Size(min = 2, max = 255, message = "{register.surName.size}")
     private String surName;
-    @ValidDOB
-    private String dateOfBirth;
+    @ValidSSN
+    private String ssn;
     @ValidEmail
     private String email;
     private List<CompetenceDTO> competences;
@@ -69,7 +69,62 @@ public class RegistrationManager implements Serializable {
         competences = applicationFacade.getCompetences();
     }
 
-    public List<CompetenceDTO> getCompetences() {
+    public String newPerson() {
+        return applicationFacade.newPerson(firstName, surName, ssn, email);
+    }
+
+    public void addCompetence() {   
+        applicationFacade.addCompetence(competence,yearsOfExperience);
+
+        //Clear input field
+        yearsOfExperience = "";
+    }
+
+    public String doneAddCompetence() {
+        return applicationFacade.doneAddCompetence();
+    }
+
+    public String registerApplication() {
+        return applicationFacade.registerApplication();
+    }
+
+    public List<CompetenceDTO> getSelectedCompetences() {
+        return applicationFacade.getSelectedCompetences();
+    }
+
+    public void setSelectedCompetences(List<CompetenceDTO> selectedCompetences) {
+        this.selectedCompetences = selectedCompetences;
+    }
+    
+    public void addAvailability() {
+
+       applicationFacade.addAvailability(availableFrom, availableTo);       
+        
+    }
+    
+    public String doneAddAvailability() {
+
+       return applicationFacade.doneAddAvailability();       
+        
+    }
+
+    public String getSsn() {
+        return ssn;
+    }
+
+    public void setSsn(String ssn) {
+        this.ssn = ssn;
+    }
+
+    public List<AvailabilityDTO> getAvailabilities() {
+        return applicationFacade.getAvailabilities();
+    }
+
+    public void SetAvailabilities(List<AvailabilityDTO> avail) {
+        this.availabilities = availabilities;
+    }
+    
+     public List<CompetenceDTO> getCompetences() {
         return competences;
     }
 
@@ -132,61 +187,5 @@ public class RegistrationManager implements Serializable {
     public void setAvailableTo(Date availableTo) {
         this.availableTo = availableTo;
     }
-
-    public String createPerson() {
-        return applicationFacade.createPerson(firstName, surName, dateOfBirth, email);
-    }
-
-    public void addCompetence() {   
-        applicationFacade.addCompetence(competence,yearsOfExperience);
-
-        //Clear input field
-        yearsOfExperience = "";
-    }
-
-    public String doneAddCompetence() {
-        return applicationFacade.doneAddCompetence();
-    }
-
-    public String registerApplication() {
-        return applicationFacade.registerApplication();
-    }
-
-    public List<CompetenceDTO> getSelectedCompetences() {
-        return applicationFacade.getSelectedCompetences();
-    }
-
-    public void setSelectedCompetences(List<CompetenceDTO> selectedCompetences) {
-        this.selectedCompetences = selectedCompetences;
-    }
-    
-    public void addAvailability() {
-
-       applicationFacade.addAvailability(availableFrom, availableTo);       
-        
-    }
-    
-    public String doneAddAvailability() {
-
-       return applicationFacade.doneAddAvailability();       
-        
-    }
-
-    public String getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public List<AvailabilityDTO> getAvailabilities() {
-        return applicationFacade.getAvailabilities();
-    }
-
-    public void SetAvailabilities(List<AvailabilityDTO> avail) {
-        this.availabilities = availabilities;
-    }
-    
     
 }

@@ -16,10 +16,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.*;
 
 /**
  *
@@ -49,24 +46,30 @@ public class ApplicationFacade {
      *
      * @param name
      * @param surName
-     * @param dateOfBirth
+     * @param ssn
      * @param email
      */
-    public String createPerson(String name, String surName, String dateOfBirth, String email) {
+    public String newPerson(String name, String surName, String ssn, String email) {
 
         if (person == null) {
             person = new Person();
         }
         person.setName(name);
         person.setSurname(surName);
-        person.setSsn(dateOfBirth);
+        person.setSsn(ssn);
         person.setEmail(email);
 
-        Role role = (Role) em.createNamedQuery("Role.findByName").setParameter("name", "job_seeker").getSingleResult();
+        Role role = null;
+        try {
+            role = (Role) em.createNamedQuery("Role.findByName").setParameter("name", "job_seeker").getSingleResult();
+        } catch (NoResultException e) {
+            //TODO Handle "role not found" in database..... perhaps output = "DB error." 
+            return null;
+        }
 
         person.setRoleId(role);
 
-        return "register2";
+        return "success";
 
     }
 
@@ -114,9 +117,10 @@ public class ApplicationFacade {
     }
 
     /**
-     *
-     * @param competence
-     * @param yearsOfExperience
+     * Add competence to list of selected competences along with the specified
+     * length of time of the applicants experience
+     * @param competence An instance of CompetenceDTO representing the selected Competence
+     * @param yearsOfExperience String representing the years of experience
      */
     public void addCompetence(CompetenceDTO competenceDTO, String yearsOfExperience) {
         if (selectedCompetenceList == null) {
@@ -136,20 +140,18 @@ public class ApplicationFacade {
 
     public String doneAddCompetence() {
 
-        //User must select atleast one competence
+        //User must have selected atleast one competence
         if (selectedCompetenceList == null) {
 
             ResourceBundle resourceBundle = ResourceBundle.getBundle("ValidationMessages");
             String error_message = resourceBundle.getString("register.competence.size");
-            FacesMessage fm = new FacesMessage(error_message);
-            fm.setSeverity(FacesMessage.SEVERITY_ERROR);
-            FacesContext.getCurrentInstance().addMessage(null, fm);
+            FacesMessage facesMessage = new FacesMessage(error_message);
+            facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage(null, facesMessage);
             return null;
         } else {
-            return "register3";
+            return "success";
         }
-
-
     }
 
     /**
@@ -171,12 +173,7 @@ public class ApplicationFacade {
     }
 
     /**
-     *
-     * @param firstName
-     * @param surName
-     * @param email
-     * @param selectedExpertise
-     * @param selectedAvailability
+     * This is the final call that persists the application 
      */
     public String registerApplication() {
         person.setCompetenceProfileCollection(competenceProfileList);

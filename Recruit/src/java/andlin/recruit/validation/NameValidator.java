@@ -10,15 +10,17 @@ import java.util.regex.Pattern;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class DOBValidator implements ConstraintValidator<ValidDOB, String> {
+public class NameValidator implements ConstraintValidator<ValidName, String> {
 
     private Pattern pattern;
     private Matcher matcher;
-    private final String DOB_PATTERN = "^\\d{6}$";
+    private final String NAME_PATTERN =
+            "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+            + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
     @Override
-    public void initialize(ValidDOB constraintAnnotation) {
-        pattern = Pattern.compile(DOB_PATTERN);
+    public void initialize(ValidName constraintAnnotation) {
+        pattern = Pattern.compile(NAME_PATTERN);
     }
 
     @Override

@@ -19,15 +19,15 @@
                         <h:inputText id="lastName" value="#{registrationManager.surName}"/>
                         <h:message for="lastName"/>
                         
-                        <h:outputLabel for="dateOfBirth"  value="#{msgs['register.dateOfBirth']} :"/>
-                        <h:inputText id="dateOfBirth" value="#{registrationManager.dateOfBirth}"/>
-                        <h:message for="dateOfBirth"/>
+                        <h:outputLabel for="ssn"  value="#{msgs['register.ssn']} :"/>
+                        <h:inputText id="ssn" value="#{registrationManager.ssn}"/>
+                        <h:message for="ssn"/>
                                              
                         <h:outputLabel for="email"  value="#{msgs['register.email']} :"/>
                         <h:inputText id="email" value="#{registrationManager.email}"/>
                         <h:message for="email"/>
                         
-                        <h:commandButton value="#{msgs['nav.nextPage']}" action="#{registrationManager.createPerson}"/>           
+                        <h:commandButton value="#{msgs['nav.nextPage']}" action="#{registrationManager.newPerson}"/>           
                     </h:panelGrid>
                 </h:form>
             </ui:define>

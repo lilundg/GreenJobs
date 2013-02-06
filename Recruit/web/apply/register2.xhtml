@@ -12,7 +12,7 @@
             <ui:define name="content">
                 <h:form>
                 <h:panelGrid>
-                    <h:outputLabel id="areaOfExpertiseText" value="Select area of expertise :"/>
+                    <h:outputLabel id="areaOfExpertiseText" value="#{msgs['register.select.expertise']} :"/>
 
                     <f:view>
                         <h:form>
@@ -37,7 +37,7 @@
             </h:form>
             <f:view>
                 <h:form>
-                    <h:outputText value="Selected areas of expertise"/>
+                    <h:outputText value="#{msgs['register.selected.expertise']} :"/>
                     <h:form>
                         <h:dataTable value="#{registrationManager.selectedCompetences}" var="item">
                             <h:column>

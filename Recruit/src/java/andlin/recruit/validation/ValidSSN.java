@@ -14,13 +14,13 @@ import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
 import javax.validation.Payload;
 
-@Constraint(validatedBy = DOBValidator.class)
+@Constraint(validatedBy = SSNValidator.class)
 @Documented
 @Target({ANNOTATION_TYPE, METHOD, FIELD})
 @Retention(RUNTIME)
-public @interface ValidDOB {
+public @interface ValidSSN {
 
-    String message() default "{register.dateOfBirth.format}";
+    String message() default "{register.ssn.format}";
 
     java.lang.Class<?>[] groups() default {};
 
