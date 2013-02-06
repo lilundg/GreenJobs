@@ -6,8 +6,6 @@ package andlin.recruit.model.dto;
 
 import andlin.recruit.model.Person;
 import java.util.Date;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 /**
  *
