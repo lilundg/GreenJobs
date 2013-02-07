@@ -7,6 +7,7 @@ package andlin.recruit.controller;
 import andlin.recruit.model.*;
 import andlin.recruit.model.dto.AvailabilityDTO;
 import andlin.recruit.model.dto.CompetenceDTO;
+import andlin.recruit.validation.ValidEmail;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.LinkedList;
@@ -52,7 +53,7 @@ public class RegistrationController {
      * @param ssn
      * @param email
      */
-    public String newPerson(String name, String surName, String ssn, String email) {
+    public String newPerson(String name, String surName, String ssn, @ValidEmail String email) {
 
         if (person == null) {
             person = new Person();

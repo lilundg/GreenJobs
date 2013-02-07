@@ -19,12 +19,12 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>home/index.xhtml</welcome-file>
+        <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
     <security-constraint>
         <display-name>Apply</display-name>
         <web-resource-collection>
-            <web-resource-name>Aply</web-resource-name>
+            <web-resource-name>Apply</web-resource-name>
             <description/>
             <url-pattern>/apply/*</url-pattern>
         </web-resource-collection>

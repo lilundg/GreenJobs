@@ -11,12 +11,13 @@ import andlin.recruit.validation.ValidEmail;
 import andlin.recruit.validation.ValidSSN;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -30,10 +31,10 @@ public class RegistrationManager implements Serializable {
 
     @EJB
     private RegistrationController registrationController;
-    @NotNull
+    @NotNull(message = "{register.firstname.null}")
     @Size(min = 2, max = 255, message = "{register.firstName.size}")
     private String firstName;
-    @NotNull
+    @NotNull(message = "{register.lastname.null}")
     @Size(min = 2, max = 255, message = "{register.surName.size}")
     private String surName;
     @ValidSSN
@@ -44,9 +45,12 @@ public class RegistrationManager implements Serializable {
     private CompetenceDTO competence;
     @NotNull(message = "{register.years.empty}")
     @Size(min = 0, max = 99, message = "{register.years.size}")
+    @Digits(fraction=2,integer=2, message = "{register.years.notanumber}")
     private String yearsOfExperience;
     private List<AvailabilityDTO> availabilities;
+    @Future
     private Date availableFrom;
+    @Future
     private Date availableTo;   
     private List<CompetenceDTO> selectedCompetences;  
     
@@ -58,7 +62,7 @@ public class RegistrationManager implements Serializable {
     
     @PostConstruct
     public void init() {
-        selectedCompetences = new LinkedList<CompetenceDTO>();
+        //pre-fetch selectable competences
         competences = registrationController.getCompetences();
     }
 
