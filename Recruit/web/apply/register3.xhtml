@@ -3,8 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
     <h:body>
         <ui:composition template="/template.xhtml">
             <ui:define name="pageTitle">
@@ -21,21 +21,31 @@
                     <h:inputText id="to" value="#{registrationManager.availableTo}" required="true">
                         <f:convertDateTime pattern="dd-MM-yyyy" />
                     </h:inputText>-->
-                    <h:outputLabel for="from" value="#{msgs['register.from']} :" />
-                    <p:calendar id="from" mode="popup" showOn="button" popupIconOnly="true" pattern="dd-MM-yyyy" navigator="true" value="#{registrationManager.availableFrom}" />
-                    <h:outputLabel for="to" value="#{msgs['register.to']} :" />
-                    <p:calendar id="to" mode="popup" showOn="button" popupIconOnly="true" pattern="dd-MM-yyyy" navigator="true" value="#{registrationManager.availableTo}" />
-
+                    <h:panelGrid>
+                        <h:outputLabel for="from" value="#{msgs['register.from']} :" />
+                        <p:calendar id="from" mode="popup" showOn="button" popupIconOnly="true" pattern="dd-MM-yyyy" navigator="true" value="#{registrationManager.availableFrom}" />
+                        <h:message for="from"/>
+                        <h:outputLabel for="to" value="#{msgs['register.to']} :" />
+                        <p:calendar id="to" mode="popup" showOn="button" popupIconOnly="true" pattern="dd-MM-yyyy" navigator="true" value="#{registrationManager.availableTo}" />
+                        <h:message for="to"/>
+                    </h:panelGrid>
                     <h:commandButton value="#{msgs['register.button.select']}" 
-                                     action="#{registrationManager.addAvailability}"/> <br/>
-                    <h:commandButton value="#{msgs['nav.nextPage']}" action="register4"/>
-
-                    <h:outputText value="#{msgs['register.selected.expertise']} :"/>
+                                     action="#{registrationManager.addAvailability}"/>
+                </h:form>
+                <h:form>
+                    <h:commandButton value="#{msgs['nav.nextPage']}" action="#{registrationManager.doneAddAvailability}"/>
+                </h:form>
+                <h:form>
+                    <h:outputText value="#{msgs['register.selected.available']} :"/>
 
                     <h:dataTable value="#{registrationManager.availabilities}" var="item">
                         <h:column>
-
-                            <h:outputText value="#{item}"/>
+                            <f:facet name="header">#{msgs['register.from']}</f:facet>
+                            <h:outputText value="#{item.fromDate}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{msgs['register.to']}</f:facet> 
+                            <h:outputText value="#{item.toDate}"/>
                         </h:column>
                     </h:dataTable>
 

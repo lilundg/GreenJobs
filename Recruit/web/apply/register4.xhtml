@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
     <h:body>
         <ui:composition template="/template.xhtml">
             <ui:define name="pageTitle">
@@ -12,23 +13,32 @@
                 <h:form>
 
                     <h:panelGrid>
-                        <h:outputText value="#{registrationManager.firstName}"/>
-                        <h:outputText value="#{registrationManager.surName}"/>
-                        <h:outputText value="#{registrationManager.ssn}"/>
-                        <h:outputText value="#{registrationManager.email}"/>           
+                        <f:facet name="header">#{msgs['register.personalinformation']}</f:facet>
+                        <h:outputLabel for="firstName" value="#{msgs['register.firstName']} :"/>
+                        <h:outputText id="firstName" value="#{registrationManager.firstName}"/>
+                        <h:outputLabel for="lastName"  value="#{msgs['register.lastName']} :"/>
+                        <h:outputText id="lastName" value="#{registrationManager.surName}"/>
+                        <h:outputLabel for="ssn"  value="#{msgs['register.ssn']} :"/>
+                        <h:outputText id="ssn" value="#{registrationManager.ssn}"/>
+                        <h:outputLabel for="email"  value="#{msgs['register.email']} :"/>
+                        <h:outputText id="email" value="#{registrationManager.email}"/>           
                     </h:panelGrid>
 
                     <h:dataTable value="#{registrationManager.selectedCompetences}" var="item">
                         <h:column>
-
+                            <f:facet name="header">#{msgs['register.competence']}</f:facet>
                             <h:outputText value="#{item}"/>
                         </h:column>
                     </h:dataTable>
 
                     <h:dataTable value="#{registrationManager.availabilities}" var="item">
                         <h:column>
-
-                            <h:outputText value="#{item}"/>
+                            <f:facet name="header">#{msgs['register.from']}</f:facet>
+                            <h:outputText value="#{item.fromDate}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{msgs['register.to']}</f:facet> 
+                            <h:outputText value="#{item.toDate}"/>
                         </h:column>
                     </h:dataTable>
 

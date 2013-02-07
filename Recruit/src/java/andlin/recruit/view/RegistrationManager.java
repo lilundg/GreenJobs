@@ -12,9 +12,12 @@ import andlin.recruit.validation.ValidSSN;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Future;
@@ -48,8 +51,10 @@ public class RegistrationManager implements Serializable {
     @Digits(fraction=2,integer=2, message = "{register.years.notanumber}")
     private String yearsOfExperience;
     private List<AvailabilityDTO> availabilities;
+    @NotNull
     @Future
     private Date availableFrom;
+    @NotNull
     @Future
     private Date availableTo;   
     private List<CompetenceDTO> selectedCompetences;  
@@ -71,16 +76,33 @@ public class RegistrationManager implements Serializable {
     }
 
     public List<CompetenceDTO> getSelectedCompetences() {
-        return registrationController.getSelectedCompetences();
+        try {
+            return registrationController.getSelectedCompetences();
+        } catch (Exception e) {
+            handleException(e);
+        }
+        
+        return null;
+        
     }
 
-    public void addCompetence() {   
+    public void addCompetence() {
         registrationController.addCompetence(competence, yearsOfExperience);
         yearsOfExperience = "";
     }
 
     public String doneAddCompetence() {
-        return registrationController.doneAddCompetence();
+
+        String status = registrationController.doneAddCompetence();
+
+        if (status.equals("failure")) {
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("ValidationMessages");
+            String error_message = resourceBundle.getString("register.competence.size");
+            FacesMessage facesMessage = new FacesMessage(error_message);
+            facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+        }
+        return status;
     }
 
     public void setSelectedCompetences(List<CompetenceDTO> selectedCompetences) {
@@ -97,6 +119,10 @@ public class RegistrationManager implements Serializable {
 
     public String registerApplication() {
         return registrationController.registerApplication();
+    }
+    
+    private void handleException(Exception e) {
+        e.printStackTrace(System.err);
     }
 
     public String getSsn() {

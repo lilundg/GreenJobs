@@ -11,7 +11,7 @@ import javax.validation.ConstraintValidatorContext;
 public class SSNValidator implements ConstraintValidator<ValidSSN, String> {
 
     private Pattern pattern;
-    private final String SSN_PATTERN = "^\\d{6}$";
+    private final String SSN_PATTERN = "^\\d{8}-\\d{4}$";
 
     @Override
     public void initialize(ValidSSN constraintAnnotation) {

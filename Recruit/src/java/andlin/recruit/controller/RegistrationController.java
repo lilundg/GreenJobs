@@ -23,8 +23,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
- *
- * @author Andlind
+ * This controller handles a session where a user registers his/hers
+ * application. No data is persisted until registerApplication is called which
+ * should be done after creating a person and adding competences and
+ * availabilities.
  */
 @Stateful
 @LocalBean
@@ -38,6 +40,7 @@ public class RegistrationController {
     private EntityManager em;
 
     /**
+     * Persist entity object
      *
      * @param object
      */
@@ -47,7 +50,11 @@ public class RegistrationController {
     }
 
     /**
-     * 
+     * Creates a new instance of entity class Person and sets some of its
+     * properties. To set property 'role' an instance of Role class with name
+     * property 'job_seeker' is retrieved from database. If no such entity
+     * exists an exception is thrown.
+     *
      * @param name
      * @param surName
      * @param ssn
@@ -58,17 +65,18 @@ public class RegistrationController {
         if (person == null) {
             person = new Person();
         }
-        
+
         person.setName(name);
         person.setSurname(surName);
         person.setSsn(ssn);
         person.setEmail(email);
 
-        Role role;
+        Role role = null;
+        //Fetch role from db
         try {
             role = (Role) em.createNamedQuery("Role.findByName").setParameter("name", "job_seeker").getSingleResult();
         } catch (NoResultException e) {
-            //TODO Handle "role not found" in database..... perhaps output = "DB error." 
+            handleException("messages", "register.exception.dberror.role");
             return "failure";
         }
 
@@ -79,7 +87,8 @@ public class RegistrationController {
     }
 
     /**
-     * Sets time periods jobseeker is able to work
+     * Add a time period that a 'person' is able to work to his/her list of time
+     * periods(availabilites)
      *
      * @param fromDate start of time period
      * @param toDate end of time period
@@ -89,14 +98,26 @@ public class RegistrationController {
             availabilityList = new LinkedList<Availability>();
         }
 
-        Availability availability = new Availability();
+        Availability availability = new Availability();   
         availability.setFromDate(fromDate);
         availability.setToDate(toDate);
         availability.setPersonId(person);
+        
+        //Avoid duplicates
+        for(Availability entry : availabilityList) {
+            if(entry.equals(availability)) 
+                return;
+        }
 
         availabilityList.add(availability);
     }
 
+    /**
+     * Called when client is done adding available time periods.
+     *
+     * @return 'success' if at least one availability has been added, otherwise
+     * 'failure'
+     */
     public String doneAddAvailability() {
         //User must provide at least one time period
         if (availabilityList == null) {
@@ -113,6 +134,8 @@ public class RegistrationController {
     }
 
     /**
+     * Called to get a list of AvailabilityDTO's representing the supplied time
+     * periods client can work.
      *
      * @return
      */
@@ -123,7 +146,9 @@ public class RegistrationController {
     /**
      * Add competence to list of selected competences along with the specified
      * length of time of the applicants experience
-     * @param competence An instance of CompetenceDTO representing the selected Competence
+     *
+     * @param competence An instance of CompetenceDTO representing the selected
+     * Competence
      * @param yearsOfExperience String representing the years of experience
      */
     public void addCompetence(CompetenceDTO competenceDTO, String yearsOfExperience) {
@@ -142,16 +167,16 @@ public class RegistrationController {
         }
     }
 
+    /**
+     * Called when client is done adding competences
+     *
+     * @return 'success' if at least one competence has been selected, otherwise
+     * 'failure'
+     */
     public String doneAddCompetence() {
 
         //User must have selected atleast one competence
         if (selectedCompetenceList == null) {
-
-            ResourceBundle resourceBundle = ResourceBundle.getBundle("ValidationMessages");
-            String error_message = resourceBundle.getString("register.competence.size");
-            FacesMessage facesMessage = new FacesMessage(error_message);
-            facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
-            FacesContext.getCurrentInstance().addMessage(null, facesMessage);
             return "failure";
         } else {
             return "success";
@@ -177,7 +202,7 @@ public class RegistrationController {
     }
 
     /**
-     * This is the final call that persists the application 
+     * This is the final call that persists the person applying for work
      */
     public String registerApplication() {
         person.setCompetenceProfileCollection(competenceProfileList);
@@ -187,7 +212,7 @@ public class RegistrationController {
         //We are done with registration, invalidate session.
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 
-        return "registration_success";
+        return "success";
     }
 
     /**
@@ -231,5 +256,13 @@ public class RegistrationController {
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    private void handleException(String bundleName, String bundleMessage) {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleName);
+        String error_message = resourceBundle.getString(bundleMessage);
+        FacesMessage fm = new FacesMessage(error_message);
+        fm.setSeverity(FacesMessage.SEVERITY_ERROR);
+        FacesContext.getCurrentInstance().addMessage(null, fm);
     }
 }

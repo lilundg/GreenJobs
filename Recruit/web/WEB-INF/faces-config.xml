@@ -59,4 +59,13 @@
         </navigation-case>
     </navigation-rule>
     
+    <navigation-rule>
+        <from-view-id>/apply/register4.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{registrationManager.registerApplication}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/apply/registration_success.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
 </faces-config>
