@@ -13,8 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
- * @author pinballmilitia
+ * Represent a role a person can have
  */
 @Entity
 @Table(name = "role")

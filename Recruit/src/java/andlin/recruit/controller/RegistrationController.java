@@ -7,18 +7,15 @@ package andlin.recruit.controller;
 import andlin.recruit.model.*;
 import andlin.recruit.model.dto.AvailabilityDTO;
 import andlin.recruit.model.dto.CompetenceDTO;
-import andlin.recruit.validation.ValidEmail;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ResourceBundle;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -33,7 +30,6 @@ import javax.persistence.Query;
 public class RegistrationController {
 
     private Person person;
-    private List<Competence> selectedCompetenceList;
     private List<CompetenceProfile> competenceProfileList;
     private List<Availability> availabilityList;
     @PersistenceContext(unitName = "RecruitPU")
@@ -53,14 +49,15 @@ public class RegistrationController {
      * Creates a new instance of entity class Person and sets some of its
      * properties. To set property 'role' an instance of Role class with name
      * property 'job_seeker' is retrieved from database. If no such entity
-     * exists an exception is thrown.
+     * exists an exception is thrown. This should be first method called when
+     * creating an application.
      *
      * @param name
      * @param surName
      * @param ssn
      * @param email
      */
-    public String newPerson(String name, String surName, String ssn, @ValidEmail String email) {
+    public String newApplication(String name, String surName, String ssn, String email) {
 
         if (person == null) {
             person = new Person();
@@ -71,16 +68,13 @@ public class RegistrationController {
         person.setSsn(ssn);
         person.setEmail(email);
 
-        Role role = null;
-        //Fetch role from db
-        try {
-            role = (Role) em.createNamedQuery("Role.findByName").setParameter("name", "job_seeker").getSingleResult();
-        } catch (NoResultException e) {
-            handleException("messages", "register.exception.dberror.role");
+        Query query = em.createNamedQuery("Role.findByName").setParameter("name", "job_seeker");
+
+        if (query.getResultList().isEmpty()) {
             return "failure";
         }
 
-        person.setRoleId(role);
+        person.setRoleId((Role) query.getResultList().get(query.getFirstResult()));
 
         return "success";
 
@@ -88,7 +82,7 @@ public class RegistrationController {
 
     /**
      * Add a time period that a 'person' is able to work to his/her list of time
-     * periods(availabilites)
+     * periods(availabilities)
      *
      * @param fromDate start of time period
      * @param toDate end of time period
@@ -98,15 +92,16 @@ public class RegistrationController {
             availabilityList = new LinkedList<Availability>();
         }
 
-        Availability availability = new Availability();   
+        Availability availability = new Availability();
         availability.setFromDate(fromDate);
         availability.setToDate(toDate);
         availability.setPersonId(person);
-        
+
         //Avoid duplicates
-        for(Availability entry : availabilityList) {
-            if(entry.equals(availability)) 
+        for (Availability entry : availabilityList) {
+            if (entry.equals(availability)) {
                 return;
+            }
         }
 
         availabilityList.add(availability);
@@ -121,12 +116,6 @@ public class RegistrationController {
     public String doneAddAvailability() {
         //User must provide at least one time period
         if (availabilityList == null) {
-
-            ResourceBundle resourceBundle = ResourceBundle.getBundle("ValidationMessages");
-            String error_message = resourceBundle.getString("register.availability.size");
-            FacesMessage fm = new FacesMessage(error_message);
-            fm.setSeverity(FacesMessage.SEVERITY_ERROR);
-            FacesContext.getCurrentInstance().addMessage(null, fm);
             return "failure";
         } else {
             return "success";
@@ -152,19 +141,29 @@ public class RegistrationController {
      * @param yearsOfExperience String representing the years of experience
      */
     public void addCompetence(CompetenceDTO competenceDTO, String yearsOfExperience) {
-        if (selectedCompetenceList == null) {
-            selectedCompetenceList = new LinkedList<Competence>();
+        if (competenceProfileList == null) {
+            competenceProfileList = new ArrayList<CompetenceProfile>();
         }
 
+        //Create Competence instance from CompetenceDTO
         Competence competence = new Competence();
         competence.setCompetenceId(competenceDTO.getCompetenceId());
         competence.setName(competenceDTO.getName());
 
-        //If not already selected
-        if (!selectedCompetenceList.contains(competence)) {
-            selectedCompetenceList.add(competence);
-            addCompetenceProfile(competence, yearsOfExperience);
+        //Check for duplicates/if already selected
+        for (CompetenceProfile competenceProfile : competenceProfileList) {
+            if (competenceProfile.getCompetenceId().equals(competence)) {
+                return;
+            }
         }
+
+        //Create CompetenceProfile instance from Competence and yearsOfExperience       
+        CompetenceProfile competenceProfile = new CompetenceProfile();
+        competenceProfile.setCompetenceId(competence);
+        competenceProfile.setYearsOfExperience(new BigDecimal(yearsOfExperience));
+        competenceProfile.setPersonId(person);
+
+        competenceProfileList.add(competenceProfile);
     }
 
     /**
@@ -176,7 +175,9 @@ public class RegistrationController {
     public String doneAddCompetence() {
 
         //User must have selected atleast one competence
-        if (selectedCompetenceList == null) {
+        if (competenceProfileList == null) {
+            return "failure";
+        } else if (competenceProfileList.isEmpty()) {
             return "failure";
         } else {
             return "success";
@@ -184,25 +185,9 @@ public class RegistrationController {
     }
 
     /**
-     *
-     * @param comp
-     * @param yearsOfExperience
-     */
-    public void addCompetenceProfile(Competence competence, String yearsOfExperience) {
-        if (competenceProfileList == null) {
-            competenceProfileList = new LinkedList<CompetenceProfile>();
-        }
-
-        CompetenceProfile competenceProfile = new CompetenceProfile();
-        competenceProfile.setCompetenceId(competence);
-        competenceProfile.setYearsOfExperience(new BigDecimal(yearsOfExperience));
-        competenceProfile.setPersonId(person);
-
-        competenceProfileList.add(competenceProfile);
-    }
-
-    /**
      * This is the final call that persists the person applying for work
+     *
+     * @return "success" when successful
      */
     public String registerApplication() {
         person.setCompetenceProfileCollection(competenceProfileList);
@@ -216,18 +201,13 @@ public class RegistrationController {
     }
 
     /**
+     * Returns a list representing all available competences
      *
-     * @return
+     * @return list of CompetenceDTO's or null if none found in db
      */
     public List<CompetenceDTO> getCompetences() {
-
         Query query = em.createNamedQuery("Competence.findAll");
-
-        try {
-            return (List<CompetenceDTO>) query.getResultList();
-        } catch (NoResultException e) {
-            return null;
-        }
+        return (List<CompetenceDTO>) query.getResultList();
     }
 
     /**
@@ -237,7 +217,14 @@ public class RegistrationController {
      * @return List of CompetenceDTO objects
      */
     public List<CompetenceDTO> getSelectedCompetences() {
-        return (List<CompetenceDTO>) (List<?>) selectedCompetenceList;
+        if (competenceProfileList == null) {
+            competenceProfileList = new ArrayList<CompetenceProfile>();
+        }
+        ArrayList<Competence> competences = new ArrayList<Competence>();
+        for (CompetenceProfile competenceProfile : competenceProfileList) {
+            competences.add(competenceProfile.getCompetenceId());
+        }
+        return (List<CompetenceDTO>) (List<?>) competences;
     }
 
     /**
@@ -248,21 +235,10 @@ public class RegistrationController {
      * @return Competence instance or null if no matching instance found
      */
     public CompetenceDTO findCompetenceByName(String name) {
-
         Query query = em.createNamedQuery("Competence.findByName").setParameter("name", name);
-
-        try {
-            return (CompetenceDTO) query.getSingleResult();
-        } catch (NoResultException e) {
+        if (query.getResultList().isEmpty()) {
             return null;
         }
-    }
-
-    private void handleException(String bundleName, String bundleMessage) {
-        ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleName);
-        String error_message = resourceBundle.getString(bundleMessage);
-        FacesMessage fm = new FacesMessage(error_message);
-        fm.setSeverity(FacesMessage.SEVERITY_ERROR);
-        FacesContext.getCurrentInstance().addMessage(null, fm);
+        return (CompetenceDTO) query.getResultList().get(query.getFirstResult());
     }
 }

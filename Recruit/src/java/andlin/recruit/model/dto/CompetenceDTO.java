@@ -5,8 +5,7 @@
 package andlin.recruit.model.dto;
 
 /**
- *
- * @author pinballmilitia
+* Represents a read only view of the Competence entity class
  */
 public interface CompetenceDTO {
 

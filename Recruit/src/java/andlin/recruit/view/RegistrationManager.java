@@ -25,8 +25,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- *
- * @author pinballmilitia
+ * JSF Managed Bean representing view on server
  */
 @Named(value = "registrationManager")
 @SessionScoped
@@ -35,17 +34,15 @@ public class RegistrationManager implements Serializable {
     @EJB
     private RegistrationController registrationController;
     @NotNull(message = "{register.firstname.null}")
-    @Size(min = 2, max = 255, message = "{register.firstName.size}")
+    @Size(min = 1, max = 255, message = "{register.firstName.size}")
     private String firstName;
     @NotNull(message = "{register.lastname.null}")
-    @Size(min = 2, max = 255, message = "{register.surName.size}")
+    @Size(min = 1, max = 255, message = "{register.surName.size}")
     private String surName;
     @ValidSSN
     private String ssn;
     @ValidEmail
     private String email;
-    private List<CompetenceDTO> competences;
-    private CompetenceDTO competence;
     @NotNull(message = "{register.years.empty}")
     @Size(min = 0, max = 99, message = "{register.years.size}")
     @Digits(fraction=2,integer=2, message = "{register.years.notanumber}")
@@ -56,73 +53,102 @@ public class RegistrationManager implements Serializable {
     private Date availableFrom;
     @NotNull
     @Future
-    private Date availableTo;   
-    private List<CompetenceDTO> selectedCompetences;  
-    
+    private Date availableTo;
+    //Available competences
+    private List<CompetenceDTO> competences;
+    //Selected competences
+    private List<CompetenceDTO> selectedCompetences;
+    //The selected competence
+    private CompetenceDTO competence;
+
     /**
      * Creates a new instance of RegistrationManager
      */
     public RegistrationManager() {
     }
     
+    /**
+     * Called after construction
+     */
     @PostConstruct
     public void init() {
         //pre-fetch selectable competences
         competences = registrationController.getCompetences();
     }
 
-    public String newPerson() {
-        return registrationController.newPerson(firstName, surName, ssn, email);
+    /**
+     * Calls controller starting a new registration with a new person
+     * @return "success" if successful, else "failure"
+     */
+    public String newApplication() {
+        return registrationController.newApplication(firstName, surName, ssn, email);
     }
 
+    /**
+     * Fetches a list representing the available competence choices
+     * @return List of competenceDTO's
+     */
     public List<CompetenceDTO> getSelectedCompetences() {
-        try {
-            return registrationController.getSelectedCompetences();
-        } catch (Exception e) {
-            handleException(e);
-        }
-        
-        return null;
-        
+        return registrationController.getSelectedCompetences();
     }
 
+    //Setter
+    public void setSelectedCompetences(List<CompetenceDTO> selectedCompetences) {
+        this.selectedCompetences = selectedCompetences;
+    }
+
+    /*
+     * Add the selected competence to list of selected competences
+     */
     public void addCompetence() {
         registrationController.addCompetence(competence, yearsOfExperience);
         yearsOfExperience = "";
     }
 
+    /**
+     * Called to mark the end of competence selection
+     * @return "success" if done, otherwise "failure"
+     */
     public String doneAddCompetence() {
 
         String status = registrationController.doneAddCompetence();
 
         if (status.equals("failure")) {
-            ResourceBundle resourceBundle = ResourceBundle.getBundle("ValidationMessages");
-            String error_message = resourceBundle.getString("register.competence.size");
-            FacesMessage facesMessage = new FacesMessage(error_message);
-            facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
-            FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+            notifyError("register.competence.size");
         }
         return status;
     }
 
-    public void setSelectedCompetences(List<CompetenceDTO> selectedCompetences) {
-        this.selectedCompetences = selectedCompetences;
-    }
-
+    /**
+     * Adds a time period the applicant is available for work.
+     */
     public void addAvailability() {
         registrationController.addAvailability(availableFrom, availableTo);
     }
 
+    /**
+     * Called when we are done adding available time periods
+     * @return 
+     */
     public String doneAddAvailability() {
-        return registrationController.doneAddAvailability();
+        String status = registrationController.doneAddAvailability();
+        if (status.equals("failure")) {
+            notifyError("register.availability.size");
+        }
+
+        return status;
     }
 
     public String registerApplication() {
         return registrationController.registerApplication();
     }
-    
-    private void handleException(Exception e) {
-        e.printStackTrace(System.err);
+
+    private void notifyError(String bundleString) {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("ValidationMessages");
+        String error_message = resourceBundle.getString(bundleString);
+        FacesMessage facesMessage = new FacesMessage(error_message);
+        facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
     }
 
     public String getSsn() {
@@ -204,5 +230,4 @@ public class RegistrationManager implements Serializable {
     public void setAvailableTo(Date availableTo) {
         this.availableTo = availableTo;
     }
-    
 }

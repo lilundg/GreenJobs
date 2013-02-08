@@ -14,8 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
- * @author pinballmilitia
+ * Represents a person
  */
 @Entity
 @Table(name = "person")

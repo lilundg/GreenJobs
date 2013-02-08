@@ -20,12 +20,12 @@
     <navigation-rule>
         <from-view-id>/apply/register.xhtml</from-view-id>
         <navigation-case>
-            <from-action>#{registrationManager.newPerson}</from-action>
+            <from-action>#{registrationManager.newApplication}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/apply/register2.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
-            <from-action>#{registrationManager.newPerson}</from-action>
+            <from-action>#{registrationManager.newApplication}</from-action>
             <from-outcome>failure</from-outcome>
             <to-view-id>/apply/register.xhtml</to-view-id>
         </navigation-case>

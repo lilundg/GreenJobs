@@ -4,7 +4,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:body>
-        <ui:composition template="template.xhtml">
+        <ui:composition template="/template.xhtml">
             <ui:define name="pageTitle">
                 #{msgs['register.title']}
             </ui:define>
@@ -14,19 +14,19 @@
                         <h:outputLabel for="firstName" value="#{msgs['register.firstName']} :"/>
                         <h:inputText id="firstName" value="#{registrationManager.firstName}"/>
                         <h:message for="firstName"/>
-                        
+
                         <h:outputLabel for="lastName"  value="#{msgs['register.lastName']} :"/>
                         <h:inputText id="lastName" value="#{registrationManager.surName}"/>
                         <h:message for="lastName"/>
-                        
+
                         <h:outputLabel for="ssn"  value="#{msgs['register.ssn']} :"/>
                         <h:inputText id="ssn" value="#{registrationManager.ssn}"/>
                         <h:message for="ssn"/>
-                                             
+
                         <h:outputLabel for="email"  value="#{msgs['register.email']} :"/>
                         <h:inputText id="email" value="#{registrationManager.email}"/>
                         <h:message for="email"/>
-                        
+
                         <h:commandButton value="#{msgs['nav.nextPage']}" action="#{registrationManager.newPerson}"/>           
                     </h:panelGrid>
                 </h:form>

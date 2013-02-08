@@ -8,8 +8,7 @@ import andlin.recruit.model.Person;
 import java.util.Date;
 
 /**
- *
- * @author pinballmilitia
+ * Represents a read only view of the Availability entity class
  */
 public interface AvailabilityDTO {
 

@@ -6,6 +6,7 @@ package andlin.recruit.view.conversion;
 
 import andlin.recruit.controller.RegistrationController;
 import andlin.recruit.model.Competence;
+import andlin.recruit.model.dto.CompetenceDTO;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -16,12 +17,11 @@ import javax.faces.convert.ConverterException;
 import javax.inject.Named;
 
 /**
- *
- * @author pinballmilitia
+ *  Converts from CompetenceDTO -> String and vice versa
  */
-@Named(value = "availabilityConverter")
+@Named(value = "competenceDTOConverter")
 @RequestScoped
-public class AvailabilityConverter implements Converter {
+public class CompetenceDTOConverter implements Converter {
 
     //Controller
     @EJB
@@ -30,7 +30,7 @@ public class AvailabilityConverter implements Converter {
     /**
      * Creates .a new instance of NewJSFManagedBean
      */
-    public AvailabilityConverter() {
+    public CompetenceDTOConverter() {
     }
 
     @Override
@@ -42,16 +42,16 @@ public class AvailabilityConverter implements Converter {
         try {
             return personFacade.findCompetenceByName(value);
         } catch (Exception e) {
-            throw new ConverterException(new FacesMessage(String.format("Cannot convert %s to Competence", value)), e);
+            throw new ConverterException(new FacesMessage(String.format("Cannot convert %s to CompetenceDTO", value)), e);
         }
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (!(value instanceof Competence)) {
+        if (!(value instanceof CompetenceDTO)) {
             return null;
         }
 
-        return ((Competence) value).getName();
+        return ((CompetenceDTO) value).getName();
     }
 }

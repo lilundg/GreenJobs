@@ -14,8 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
- * @author pinballmilitia
+ * Represents a work competence
  */
 @Entity
 @Table(name = "competence")

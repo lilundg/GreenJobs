@@ -12,8 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
- * @author pinballmilitia
+ * Represents a time period a job_seeker can work
  */
 @Entity
 @Table(name = "availability")

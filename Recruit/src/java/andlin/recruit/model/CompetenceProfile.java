@@ -11,8 +11,7 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
- * @author pinballmilitia
+ * Represents a persons competence profile
  */
 @Entity
 @Table(name = "competence_profile")
