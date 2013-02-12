@@ -57,7 +57,7 @@ public class RegistrationController {
      * @param ssn
      * @param email
      */
-    public String newApplication(String name, String surName, String ssn, String email) {
+    public String newApplication(String name, String surName, String ssn, String email) throws Exception {
 
         if (person == null) {
             person = new Person();

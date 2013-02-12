@@ -5,7 +5,6 @@
 package andlin.recruit.view.conversion;
 
 import andlin.recruit.controller.RegistrationController;
-import andlin.recruit.model.Competence;
 import andlin.recruit.model.dto.CompetenceDTO;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;

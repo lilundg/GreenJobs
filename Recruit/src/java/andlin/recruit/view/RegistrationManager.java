@@ -80,7 +80,7 @@ public class RegistrationManager implements Serializable {
      * Calls controller starting a new registration with a new person
      * @return "success" if successful, else "failure"
      */
-    public String newApplication() {
+    public String newApplication() throws Exception {
         return registrationController.newApplication(firstName, surName, ssn, email);
     }
 

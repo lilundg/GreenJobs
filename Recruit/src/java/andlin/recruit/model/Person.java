@@ -4,6 +4,7 @@
  */
 package andlin.recruit.model;
 
+import andlin.recruit.model.dto.PersonDTO;
 import andlin.recruit.validation.ValidEmail;
 import java.io.Serializable;
 import java.util.Collection;
@@ -28,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Person.findByEmail", query = "SELECT p FROM Person p WHERE p.email = :email"),
     @NamedQuery(name = "Person.findByPassword", query = "SELECT p FROM Person p WHERE p.password = :password"),
     @NamedQuery(name = "Person.findByUsername", query = "SELECT p FROM Person p WHERE p.username = :username")})
-public class Person implements Serializable {
+public class Person implements PersonDTO, Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
