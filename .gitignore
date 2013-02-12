@@ -4,6 +4,6 @@
 Recruit/src/conf/persistence.xml
 /Recruit/build/
 /Recruit/dist/
-/WebApplication1/
 /Recruit/setup/
-/project.properties
+/Recruit/nbproject/
+/Recruit/lib/
