@@ -1,43 +1,58 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this template, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html">
-    <head>
-        <title>TODO supply a title</title>
-    </head>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
     <h:body>
-        
-    <h:outputText value="#{recruitmentManager.testname}"/>
-                <f:view>
-                    <h:form>
+        <ui:composition template="/template.xhtml">
+            <ui:define name="pageTitle">
+                #{msgs['register.title']}
+            </ui:define>
+            <ui:define name="content">
+                <h:form>
+
+                    <h:panelGrid>
                         <h:outputText value="#{recruitmentManager.currentPerson.name}"/>
-                        
-                        <h:dataTable value="#{recruitmentManager.currentPerson}" var="item">
-                            <h:column>
-                                <f:facet name="header">First name</f:facet>
-                                <h:outputText value="#{item.name}"/>                    
-                            </h:column>
+                        <h:outputText value="#{recruitmentManager.currentPerson.surname}"/>
+                        <h:outputText value="#{recruitmentManager.currentPerson.ssn}"/>
+                        <h:outputText value="#{recruitmentManager.currentPerson.email}"/>
+                    </h:panelGrid>
 
-                            <h:column>
-                                <f:facet name="header">Last name</f:facet>
-                                <h:outputText value="#{item.surname}"/>                    
-                            </h:column>
+                    <f:view>
+                        <h:form>
+                            <h:dataTable border="1" value="#{recruitmentManager.currentPerson.competenceProfileCollection}" var="item">
+                                <h:column>
+                                    <h:outputText value="#{item.competenceId}"/>                                    
+                                </h:column>
+                                <h:column>                                    
+                                    <h:outputText value="#{item.yearsOfExperience}"/>
+                                </h:column>
+                            </h:dataTable>
+                        </h:form>
+                    </f:view>
 
-                            <h:column>
-                                <f:facet name="header">ssn</f:facet>
-                                <h:outputText value="#{item.ssn}"/>                    
-                            </h:column>
+                    <f:view>
+                        <h:form>
+                            <h:dataTable border="1" value="#{recruitmentManager.currentPerson.availabilityCollection}" var="item">
 
-                            <h:column>
-                                <f:facet name="header">email</f:facet>
-                                <h:outputText value="#{item.email}"/>                    
-                            </h:column>
+                                <h:column>                                    
+                                    <h:outputText value="#{item.fromDate}"/>
+                                </h:column>
+                                <h:column>                                    
+                                    <h:outputText value="#{item.toDate}"/>
+                                </h:column>
+                            </h:dataTable>
+                        </h:form>
+                    </f:view>
 
-                        </h:dataTable>
-                    </h:form>
-                </f:view>
+                </h:form>
+                <h:form>
+                    <h:commandButton value="Accept" action="#{recruitmentManager.accept}"/>
+                    <h:commandButton value="Reject" action="#{recruitmentManager.reject}"/>
+                </h:form>                
+            </ui:define>
+        </ui:composition>
     </h:body>
 </html>
+

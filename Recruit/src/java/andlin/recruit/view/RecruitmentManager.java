@@ -5,18 +5,15 @@
 package andlin.recruit.view;
 
 import andlin.recruit.controller.RecruitmentController;
-import andlin.recruit.model.Person;
 import andlin.recruit.model.dto.CompetenceDTO;
 import andlin.recruit.model.dto.PersonDTO;
-import java.util.ArrayList;
-import java.util.Date;
+import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.inject.Named;
-import javax.enterprise.context.Dependent;
-import javax.faces.bean.SessionScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.model.DataModel;
+import javax.inject.Named;
 
 /**
  *
@@ -24,88 +21,74 @@ import javax.faces.model.DataModel;
  */
 @Named(value = "recruitmentManager")
 @SessionScoped
-public class RecruitmentManager {
-    private Date fromDate;
-    private Date toDate;
-    private Date registrationDate;
-    private List<CompetenceDTO> competences;
-    private CompetenceDTO competence;
-    private String name;
-    
+public class RecruitmentManager implements Serializable {
+
+    @EJB
+    private RecruitmentController recruitmentController;
     private DataModel<PersonDTO> persons;
     private PersonDTO currentPerson;
-    
-    
-    private String testname;
-    
-    @EJB
-    RecruitmentController controller;
+    //Search variables
+    private String name;
+    private List<CompetenceDTO> competences;
+    private CompetenceDTO competence;
+
     /**
-     * Creates a new instance of RecruitmentManager
+     * Creates a new instance of TestManager
      */
     public RecruitmentManager() {
     }
-    
+
     @PostConstruct
     public void init() {
-        competences = controller.getCompetences();
-    }
-    
-    public void findPersons() {
-        setPersons(controller.findPersons());
+        competences = recruitmentController.getCompetences();
     }
 
-    public String showDetails(PersonDTO person) throws Exception {
-
-        setTestname("APORNA PLAB");
-        
-        setCurrentPerson(person);     
-        
-        if (getCurrentPerson() == null) {
-            return "failure";
+    public void find() {
+        if (name == null) {
+            persons = recruitmentController.find();
         } else {
-            return "success";
-        }       
+            persons = recruitmentController.find(name);
+        }
     }
 
-    public List<CompetenceDTO> getCompetences() {
-        return competences;
+    /**
+     * Allows caller to view all details of application
+     *
+     * @return
+     */
+    public String show() {
+        currentPerson = persons.getRowData();
+        return "success";
     }
 
-    public void setCompetences(List<CompetenceDTO> competences) {
-        this.competences = competences;
+    /**
+     * Accept application
+     */
+    public void accept() {
+        recruitmentController.accept(currentPerson);
     }
 
-    public Date getFromDate() {
-        return fromDate;
-    }
-
-    public void setFromDate(Date fromDate) {
-        this.fromDate = fromDate;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    /**
+     * Reject application
+     */
+    public void reject() {
+        recruitmentController.reject(currentPerson);
     }
 
     public DataModel<PersonDTO> getPersons() {
-        return controller.findPersons();
+        return persons;
     }
 
     public void setPersons(DataModel<PersonDTO> persons) {
         this.persons = persons;
     }
 
-    public Date getRegistrationDate() {
-        return registrationDate;
+    public PersonDTO getCurrentPerson() {
+        return currentPerson;
     }
 
-    public void setRegistrationDate(Date registrationDate) {
-        this.registrationDate = registrationDate;
+    public void setCurrentPerson(PersonDTO currentPerson) {
+        this.currentPerson = currentPerson;
     }
 
     public CompetenceDTO getCompetence() {
@@ -116,30 +99,19 @@ public class RecruitmentManager {
         this.competence = competence;
     }
 
-    public Date getToDate() {
-        return toDate;
+    public List<CompetenceDTO> getCompetences() {
+        return competences;
     }
 
-    public void setToDate(Date toDate) {
-        this.toDate = toDate;
+    public void setCompetences(List<CompetenceDTO> competences) {
+        this.competences = competences;
     }
 
-    public PersonDTO getCurrentPerson() {
-        return currentPerson;
+    public String getName() {
+        return name;
     }
 
-    public void setCurrentPerson(PersonDTO currentPerson) {
-        this.currentPerson = currentPerson;
+    public void setName(String name) {
+        this.name = name;
     }
-    
-    //test
-
-    public String getTestname() {
-        return testname;
-    }
-
-    public void setTestname(String testname) {
-        this.testname = testname;
-    }
-    
 }

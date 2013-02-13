@@ -73,7 +73,7 @@
     <navigation-rule>
         <from-view-id>/manage/manage.xhtml</from-view-id>
         <navigation-case>
-            <from-action>#{recruitmentManager.showDetails(item)}</from-action>
+            <from-action>#{recruitmentManager.show}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/manage/show.xhtml</to-view-id>
         </navigation-case>
