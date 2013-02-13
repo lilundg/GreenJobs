@@ -16,8 +16,7 @@ import javax.faces.model.DataModel;
 import javax.inject.Named;
 
 /**
- *
- * @author pinballmilitia
+ * This backing bean forwards calls from client to controller
  */
 @Named(value = "recruitmentManager")
 @SessionScoped
@@ -27,9 +26,9 @@ public class RecruitmentManager implements Serializable {
     private RecruitmentController recruitmentController;
     private DataModel<PersonDTO> persons;
     private PersonDTO currentPerson;
-    //Search variables
-    private String name;
     private List<CompetenceDTO> competences;
+    //Search variables
+    private String name;    
     private CompetenceDTO competence;
 
     /**
@@ -38,11 +37,17 @@ public class RecruitmentManager implements Serializable {
     public RecruitmentManager() {
     }
 
+    /**
+     * Fetches all available competences
+     */
     @PostConstruct
     public void init() {
         competences = recruitmentController.getCompetences();
     }
 
+    /**
+     * Query database for all job seekers
+     */
     public void find() {
         if (name == null) {
             persons = recruitmentController.find();
@@ -54,7 +59,7 @@ public class RecruitmentManager implements Serializable {
     /**
      * Allows caller to view all details of application
      *
-     * @return
+     * @return 'success'....always
      */
     public String show() {
         currentPerson = persons.getRowData();
@@ -62,19 +67,23 @@ public class RecruitmentManager implements Serializable {
     }
 
     /**
-     * Accept application
+     * Accept application of currentPerson
      */
     public void accept() {
         recruitmentController.accept(currentPerson);
     }
 
     /**
-     * Reject application
+     * Reject application of currentPerson
      */
     public void reject() {
         recruitmentController.reject(currentPerson);
     }
 
+    
+    /***********************
+     * GETTERS AND SETTERS *
+     ***********************/
     public DataModel<PersonDTO> getPersons() {
         return persons;
     }

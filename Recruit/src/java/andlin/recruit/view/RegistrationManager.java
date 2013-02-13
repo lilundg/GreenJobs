@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * JSF Managed Bean representing view on server
+ * JSF Managed Bean representing client on server
  */
 @Named(value = "registrationManager")
 @SessionScoped
