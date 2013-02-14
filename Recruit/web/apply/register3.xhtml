@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core">
     <h:body>
         <ui:composition template="/template.xhtml">
@@ -14,10 +14,10 @@
                 <h:form>
                     <h:panelGrid>
                         <h:outputLabel for="from" value="#{msgs['register.from']} :" />
-                        <p:calendar id="from" mode="popup" showOn="button" popupIconOnly="true" pattern="dd-MM-yyyy" navigator="true" value="#{registrationManager.availableFrom}" />
+                        <p:calendar locale="#{language.locale}" id="from" mode="popup" pattern="dd-MM-yyyy" navigator="true" value="#{registrationManager.availableFrom}" />
                         <h:message for="from"/>
                         <h:outputLabel for="to" value="#{msgs['register.to']} :" />
-                        <p:calendar id="to" mode="popup" showOn="button" popupIconOnly="true" pattern="dd-MM-yyyy" navigator="true" value="#{registrationManager.availableTo}" />
+                        <p:calendar locale="#{language.locale}" id="to" mode="popup" pattern="dd-MM-yyyy" navigator="true" value="#{registrationManager.availableTo}" />
                         <h:message for="to"/>
                     </h:panelGrid>
                     <h:commandButton value="#{msgs['register.button.select']}" 
