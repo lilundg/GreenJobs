@@ -20,34 +20,51 @@
                     </h:selectOneMenu>
                     <br/>
 
-                    <h:commandButton value="Find" action="#{recruitmentManager.find}"/>
+                    <h:commandButton value="#{msgs['manage.button.find']}" action="#{recruitmentManager.find}"/>
 
                 </h:form>
+                
+    
+                
+                <h:form prependId="false">  
 
-                <f:view>
+                    <p:dataTable id="dataTable" var="person" value="#{recruitmentManager.persons}"  
+                                 paginator="true" rows="10"  
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                 rowsPerPageTemplate="10,20,50,100">  
+                        <f:facet name="header">  
+                            Applicants  
+                        </f:facet>  
 
-                    <h:form>
-                        <h:dataTable border="1" value="#{recruitmentManager.persons}" var="item">
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msgs['manage.table.firstname']}" />  
+                            </f:facet>  
+                            <h:outputText value="#{person.name}" />  
+                        </p:column>  
 
-                            <h:column>
-                                <h:outputText value="#{item.name}"/>
-                            </h:column>
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msgs['manage.table.surname']}" />  
+                            </f:facet>  
+                            <h:outputText value="#{person.surname}" />  
+                        </p:column>  
 
-                            <h:column>
-                                <h:outputText value="#{item.surname}"/>
-                            </h:column>
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msgs['manage.table.ssn']}" />  
+                            </f:facet>  
+                            <h:outputText value="#{person.ssn}" />  
+                        </p:column>  
 
-                            <h:column>
-                                <h:outputText value="#{item.ssn}"/>
-                            </h:column>
+                        <p:column>  
 
-                            <h:column>
-                                <h:commandLink value="Show details" action="#{recruitmentManager.show}"/>
-                            </h:column>
+                            <h:commandLink value="#{msgs['manage.button.show']}" action="#{recruitmentManager.show}"/> 
+                        </p:column> 
 
-                        </h:dataTable>
-                    </h:form>
-                </f:view>    
+                    </p:dataTable>  
+
+                </h:form> 
 
             </ui:define>
         </ui:composition>
