@@ -9,6 +9,7 @@ import andlin.recruit.model.Person;
 import andlin.recruit.model.Role;
 import andlin.recruit.model.dto.CompetenceDTO;
 import andlin.recruit.model.dto.PersonDTO;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
@@ -70,6 +71,26 @@ public class RecruitmentController {
         DataModel model = new ListDataModel((List<PersonDTO>) (List<?>) persons);
         return model;
     }
+    
+    public DataModel<PersonDTO> search(String name, Date date, CompetenceDTO comp){
+        if(name == null){
+            name = "";
+        }
+        String competence = "";
+        if(comp != null){
+            competence = comp.getName();
+        }
+        Query query = em.createQuery("SELECT DISTINCT p FROM Person p, CompetenceProfile c WHERE p = c.personId AND c.competenceId.name LIKE ?2 AND (p.name LIKE ?1 OR p.surname LIKE ?1)");
+        //Query query = em.createQuery("SELECT p FROM Person p WHERE p.name LIKE ?1 OR p.surname LIKE ?1");
+        query.setParameter(1, "%" + name + "%");
+        query.setParameter(2, "%" + competence + "%");
+        
+        List<Person> result = (List<Person>) query.getResultList();
+        DataModel model = new ListDataModel((List<PersonDTO>) (List<?>) result);
+        return model;
+    }
+    
+    
 
     /**
      * Changes role of person from 'job_seeker' to 'accepted'

@@ -55,6 +55,10 @@ public class RecruitmentManager implements Serializable {
             persons = recruitmentController.find(name);
         }
     }
+    
+    public void search(){
+        persons = recruitmentController.search(name, null, competence);
+    }
 
     /**
      * Allows caller to view all details of application
