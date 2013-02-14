@@ -4,27 +4,22 @@
  */
 package andlin.recruit.controller;
 
+import andlin.recruit.model.Competence;
 import andlin.recruit.model.Person;
 import andlin.recruit.model.Role;
 import andlin.recruit.model.dto.CompetenceDTO;
 import andlin.recruit.model.dto.PersonDTO;
 import java.util.List;
-import java.util.Vector;
-import javax.ejb.Stateful;
 import javax.ejb.LocalBean;
-import javax.faces.model.ArrayDataModel;
+import javax.ejb.Stateful;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Expression;
-import javax.persistence.metamodel.Metamodel;
 
 /**
- *
- * @author pinballmilitia
+ *  This is the controller for handling applications
  */
 @Stateful
 @LocalBean
@@ -38,15 +33,22 @@ public class RecruitmentController {
         em.persist(object);
     }
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
-    public DataModel<PersonDTO> find() {
-        //Query query = em.createNamedQuery("Role.findByName");
-        persons = (List<Person>) em.createNamedQuery("Person.findAllJobSeekers").getResultList();
+    /**
+     * Query database for all available applicants
+     * 
+     * @return a list of job seekers (Person)
+     */
+    public DataModel<PersonDTO> find() { 
+        persons = (List<Person>) em.createNamedQuery("Person.findAll").getResultList();
         DataModel model = new ListDataModel((List<PersonDTO>) (List<?>) persons);
         return model;
     }
 
+        /**
+     * Query database for applicants by name
+     * 
+     * @return a list of job seekers with matching name (Person)
+     */
     public DataModel<PersonDTO> find(String name) {
         Query query = em.createNamedQuery("Person.findByName");
         query.setParameter("name", name);
@@ -90,13 +92,11 @@ public class RecruitmentController {
      */
     public List<CompetenceDTO> getCompetences() {
         Query query = em.createNamedQuery("Competence.findAll");
-        return (List<CompetenceDTO>) query.getResultList();
-    }
-
-    public void tester() {
-        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-        criteriaBuilder.createQuery(Person.class);
-        Metamodel metamodel = em.getMetamodel();
-
+        List<Competence> resultList = query.getResultList();
+        
+        Competence empty_competence = new Competence();
+        empty_competence.setName("-");
+        resultList.add(0, empty_competence);
+        return (List<CompetenceDTO>) (List<?>) resultList;
     }
 }
