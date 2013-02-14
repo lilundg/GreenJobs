@@ -108,5 +108,4 @@ public class CompetenceProfile implements Serializable {
     public String toString() {
         return "andlin.recruit.model.CompetenceProfile[ competenceProfileId=" + competenceProfileId + " ]";
     }
-    
 }

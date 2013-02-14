@@ -24,7 +24,7 @@ public class CompetenceDTOConverter implements Converter {
 
     //Controller
     @EJB
-    private RegistrationController personFacade;
+    private RegistrationController registrationController;
 
     /**
      * Creates .a new instance of NewJSFManagedBean
@@ -39,7 +39,7 @@ public class CompetenceDTOConverter implements Converter {
         }
 
         try {
-            return personFacade.findCompetenceByName(value);
+            return registrationController.findCompetenceByName(value);
         } catch (Exception e) {
             throw new ConverterException(new FacesMessage(String.format("Cannot convert %s to CompetenceDTO", value)), e);
         }

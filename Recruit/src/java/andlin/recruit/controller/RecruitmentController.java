@@ -34,12 +34,26 @@ public class RecruitmentController {
     }
 
     /**
-     * Query database for all available applicants
+     * Query database for all available applicants i.e. persons
+     * with role = 'job_seeker'
      * 
      * @return a list of job seekers (Person)
      */
-    public DataModel<PersonDTO> find() { 
-        persons = (List<Person>) em.createNamedQuery("Person.findAll").getResultList();
+    public DataModel<PersonDTO> find() {
+        //persons = (List<Person>) em.createNamedQuery("Person.findAll").getResultList();
+
+        //get role 
+        Query query = em.createNamedQuery("Role.findByName").setParameter("name", "job_seeker");
+
+        Role role = (Role) query.getResultList().get(query.getFirstResult());      
+        
+        Query queryPersons = em.createQuery("select p from Person p where p.roleId = :roleId");
+        
+        queryPersons.setParameter("roleId", role);
+        //persons = em.createQuery("select p from Person p where p.roleId = :roleId").getResultList();        
+
+        persons = queryPersons.getResultList();
+        
         DataModel model = new ListDataModel((List<PersonDTO>) (List<?>) persons);
         return model;
     }
@@ -65,10 +79,17 @@ public class RecruitmentController {
     public void accept(PersonDTO person) {
         Query query = em.createNamedQuery("Role.findByName");
         query.setParameter("name", "accepted");
-        Role role = (Role) query.getResultList().get(0);
-        Person acceptedPerson = (Person) person;
-        acceptedPerson.setRoleId(role);
-        persist(acceptedPerson);
+        Role accepted_role = (Role) query.getResultList().get(0);
+               
+        Person searchPerson = new Person(person.getPersonId());
+        
+        Query pquery = em.createNamedQuery("Person.findByPersonId");
+        pquery.setParameter("personId", person.getPersonId());
+        
+        Person acceptedPerson = (Person) pquery.getResultList().get(0);
+        
+        acceptedPerson.setRoleId(accepted_role);
+        em.flush();
     }
 
     /**
@@ -79,10 +100,17 @@ public class RecruitmentController {
     public void reject(PersonDTO person) {
         Query query = em.createNamedQuery("Role.findByName");
         query.setParameter("name", "rejected");
-        Role role = (Role) query.getResultList().get(0);
-        Person rejectedPerson = (Person) person;
-        rejectedPerson.setRoleId(role);
-        persist(rejectedPerson);
+        Role rejected_role = (Role) query.getResultList().get(0);
+        
+        Person searchPerson = new Person(person.getPersonId());
+        
+        Query pquery = em.createNamedQuery("Person.findByPersonId");
+        pquery.setParameter("personId", person.getPersonId());
+        
+        Person rejectedPerson = (Person) pquery.getResultList().get(0);
+        
+        rejectedPerson.setRoleId(rejected_role);
+        em.flush();
     }
 
     /**
