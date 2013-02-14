@@ -27,7 +27,7 @@ import javax.validation.constraints.Size;
 /**
  * JSF Managed Bean representing client on server
  */
-@Named(value = "registrationManager")
+//@Named(value = "registrationManager")
 @SessionScoped
 public class RegistrationManager implements Serializable {
 

@@ -6,7 +6,8 @@ package andlin.recruit.controller;
  */
 
 
-import andlin.recruit.model.*;
+import andlin.recruit.model.Competence;
+import andlin.recruit.model.Role;
 import andlin.recruit.model.dto.CompetenceDTO;
 import java.util.List;
 import javax.ejb.LocalBean;

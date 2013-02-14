@@ -11,7 +11,7 @@
             </ui:define>
             <ui:define name="content">
                 <h:form>
-                    <h:commandButton value="Back" action="/manage/manage.xhtml"/>
+                    <h:commandButton value="#{msgs['nav.back']}" action="/manage/manage.xhtml"/>
                     <h:panelGrid>
                         <h:outputText value="#{recruitmentManager.currentPerson.name}"/>
                         <h:outputText value="#{recruitmentManager.currentPerson.surname}"/>
@@ -48,8 +48,8 @@
 
                 </h:form>
                 <h:form>
-                    <h:commandButton value="Accept" action="#{recruitmentManager.accept}"/>
-                    <h:commandButton value="Reject" action="#{recruitmentManager.reject}"/>                
+                    <h:commandButton value="#{msgs['manage.accept']}" action="#{recruitmentManager.accept}"/>
+                    <h:commandButton value="#{msgs['manage.reject']}" action="#{recruitmentManager.reject}"/>                
                 </h:form>                
             </ui:define>
         </ui:composition>
