@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.prime.com.tr/ui">
     <h:body>
         <ui:composition template="/template.xhtml">
             <ui:define name="pageTitle">
@@ -11,46 +12,88 @@
             </ui:define>
             <ui:define name="content">
                 <h:form>
-                    <h:commandButton value="#{msgs['nav.back']}" action="/manage/manage.xhtml"/>
-                    <h:panelGrid>
-                        <h:outputText value="#{recruitmentManager.currentPerson.name}"/>
-                        <h:outputText value="#{recruitmentManager.currentPerson.surname}"/>
-                        <h:outputText value="#{recruitmentManager.currentPerson.ssn}"/>
-                        <h:outputText value="#{recruitmentManager.currentPerson.email}"/>
-                    </h:panelGrid>
+                    <p>
+                        <h:commandButton value="#{msgs['nav.back']}" action="/manage/manage.xhtml"/>
+                    </p>
 
-                    <f:view>
-                        <h:form>
-                            <h:dataTable border="1" value="#{recruitmentManager.currentPerson.competenceProfileCollection}" var="item">
-                                <h:column>
-                                    <h:outputText value="#{item.competenceId}"/>                                    
-                                </h:column>
-                                <h:column>                                    
-                                    <h:outputText value="#{item.yearsOfExperience}"/>
-                                </h:column>
-                            </h:dataTable>
-                        </h:form>
-                    </f:view>
-
-                    <f:view>
-                        <h:form>
-                            <h:dataTable border="1" value="#{recruitmentManager.currentPerson.availabilityCollection}" var="item">
-
-                                <h:column>                                    
-                                    <h:outputText value="#{item.fromDate}"/>
-                                </h:column>
-                                <h:column>                                    
-                                    <h:outputText value="#{item.toDate}"/>
-                                </h:column>
-                            </h:dataTable>
-                        </h:form>
-                    </f:view>
-
+                    <p>
+                        <h:outputLabel for="name" value="#{msgs['register.firstName']} : "/>
+                        <h:outputText id="name" value="#{recruitmentManager.currentPerson.name}"/><br/>
+                        <h:outputLabel for="surname" value="#{msgs['register.lastName']} : "/>
+                        <h:outputText id="surname" value="#{recruitmentManager.currentPerson.surname}"/><br/>
+                        <h:outputLabel for="ssn" value="#{msgs['register.ssn']} : "/>
+                        <h:outputText id="ssn" value="#{recruitmentManager.currentPerson.ssn}"/><br/>
+                        <h:outputLabel for="email" value="#{msgs['register.email']} : "/>
+                        <h:outputText id="email" value="#{recruitmentManager.currentPerson.email}"/><br/>
+                    </p>
                 </h:form>
+
+
+
+
+
+                <h:form prependId="false">  
+
+                    <p:dataTable id="competenceProfileDataTable" var="competenceProfile" value="#{recruitmentManager.currentPerson.competenceProfileCollection}"  
+                                 paginator="false" rows="10"                                   
+                                 rowsPerPageTemplate="10,20,50,100">  
+                        <f:facet name="header">  
+                            #{msgs['manage.table.competenceprofile']}
+                        </f:facet>  
+
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msgs['register.competence']}" />  
+                            </f:facet>  
+                            <h:outputText value="#{competenceProfile.competenceId}" />  
+                        </p:column>  
+
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msgs['register.yearsofexperience']}" />  
+                            </f:facet>  
+                            <h:outputText value="#{competenceProfile.yearsOfExperience}" />  
+                        </p:column>  
+
+                    </p:dataTable>  
+
+                </h:form> 
+
+
+
+
+                <h:form prependId="false">  
+
+                    <p:dataTable id="availabilityDataTable" var="availability" value="#{recruitmentManager.currentPerson.availabilityCollection}"  
+                                 paginator="false" rows="10"  
+                                 rowsPerPageTemplate="10,20,50,100">  
+                        <f:facet name="header">  
+                            #{msgs['manage.table.availability']}
+                        </f:facet>  
+
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msgs['register.from']}" />  
+                            </f:facet>  
+                            <h:outputText value="#{availability.fromDate}" />  
+                        </p:column>  
+
+                        <p:column>  
+                            <f:facet name="header">  
+                                <h:outputText value="#{msgs['register.to']}" />  
+                            </f:facet>  
+                            <h:outputText value="#{availability.toDate}" />  
+                        </p:column>  
+
+                    </p:dataTable>  
+
+                </h:form> 
+
                 <h:form>
                     <h:commandButton value="#{msgs['manage.accept']}" action="#{recruitmentManager.accept}"/>
                     <h:commandButton value="#{msgs['manage.reject']}" action="#{recruitmentManager.reject}"/>                
-                </h:form>                
+                </h:form>  
+
             </ui:define>
         </ui:composition>
     </h:body>
