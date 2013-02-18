@@ -28,7 +28,7 @@ public class RecruitmentController {
 
     @PersistenceContext(unitName = "RecruitPU")
     private EntityManager em;
-    private List<Person> persons;
+    //private List<Person> persons;
     /*
     @Inject
     Logger logger;
@@ -119,8 +119,6 @@ public class RecruitmentController {
         Query query = em.createNamedQuery("Role.findByName");
         query.setParameter("name", "rejected");
         Role rejected_role = (Role) query.getResultList().get(0);
-        
-        Person searchPerson = new Person(person.getPersonId());
         
         Query pquery = em.createNamedQuery("Person.findByPersonId");
         pquery.setParameter("personId", person.getPersonId());

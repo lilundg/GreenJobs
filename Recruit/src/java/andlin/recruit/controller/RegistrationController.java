@@ -1,11 +1,5 @@
 package andlin.recruit.controller;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
 import andlin.recruit.model.Competence;
 import andlin.recruit.model.Role;
 import andlin.recruit.model.dto.CompetenceDTO;
@@ -38,8 +32,11 @@ public class RegistrationController {
 
     }
 
+    /**
+     * Queries the database for the "job_seeker" Role entity
+     * @return the Role with name job_seeker
+     */
     public Role getSeekerRole(){
-        
         Query query = em.createNamedQuery("Role.findByName").setParameter("name", "job_seeker");
 
         if (query.getResultList().isEmpty()) {

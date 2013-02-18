@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package andlin.recruit.view;
 
 import andlin.recruit.controller.RegistrationController;
@@ -29,7 +25,6 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.persistence.Query;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
@@ -59,7 +54,6 @@ public class RegistrationManager implements Serializable {
     @Size(min = 0, max = 99, message = "{register.years.size}")
     @Digits(fraction=2,integer=2, message = "{register.years.notanumber}")
     private String yearsOfExperience;
-    private List<AvailabilityDTO> availabilities;
     @NotNull
     @Future
     private Date availableFrom;
@@ -68,8 +62,6 @@ public class RegistrationManager implements Serializable {
     private Date availableTo;
     //Available competences
     private List<CompetenceDTO> competences;
-    //Selected competences
-    private List<CompetenceDTO> selectedCompetences;
     //The selected competence
     private CompetenceDTO competence;
     //
@@ -112,23 +104,6 @@ public class RegistrationManager implements Serializable {
 
             return "success";
         }
-    }
-
-    /**
-     * Fetches a list representing the available competence choices
-     * @return List of competenceDTO's
-     */
-    public List<CompetenceProfileDTO> getSelectedCompetences() {
-        if (competenceProfileList == null) {
-            competenceProfileList = new ArrayList<CompetenceProfile>();
-        }
-        
-        return (List<CompetenceProfileDTO>) (List<?>) competenceProfileList;
-    }
-
-    //Setter
-    public void setSelectedCompetences(List<CompetenceDTO> selectedCompetences) {
-        this.selectedCompetences = selectedCompetences;
     }
 
     /*
@@ -214,6 +189,13 @@ public class RegistrationManager implements Serializable {
         return status;
     }
 
+    /**
+     * Adds the stored competence profile list and availability list to the person object
+     * and sends it to the controller to persist.
+     * Invalidates the current session.
+     * 
+     * @return success if no error
+     */
     public String registerApplication() {
         person.setCompetenceProfileCollection(competenceProfileList);
         person.setAvailabilityCollection(availabilityList);
@@ -236,6 +218,9 @@ public class RegistrationManager implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
     }
 
+    /***********************
+     * GETTERS AND SETTERS *
+     ***********************/
     public String getSsn() {
         return ssn;
     }
@@ -249,7 +234,14 @@ public class RegistrationManager implements Serializable {
     }
 
     public void SetAvailabilities(List<AvailabilityDTO> availabilities) {
-        this.availabilities = availabilities;
+    }
+    
+    public List<CompetenceProfileDTO> getSelectedCompetences() {
+        
+        return (List<CompetenceProfileDTO>) (List<?>) competenceProfileList;
+    }
+
+    public void setSelectedCompetences(List<CompetenceProfileDTO> selectedCompetences) {
     }
     
      public List<CompetenceDTO> getCompetences() {
