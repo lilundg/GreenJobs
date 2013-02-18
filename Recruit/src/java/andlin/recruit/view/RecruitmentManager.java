@@ -7,6 +7,7 @@ package andlin.recruit.view;
 import andlin.recruit.controller.RecruitmentController;
 import andlin.recruit.model.dto.CompetenceDTO;
 import andlin.recruit.model.dto.PersonDTO;
+import andlin.recruit.model.dto.RecruitmentQueryDTO;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +32,8 @@ public class RecruitmentManager implements Serializable {
     private Date fromDate;
     private Date toDate;
     //Search variables
-    private String name;    
+    private String firstName;
+    private String surName;
     private CompetenceDTO competence;
 
     /**
@@ -50,17 +52,17 @@ public class RecruitmentManager implements Serializable {
 
     /**
      * Query database for all job seekers
-     */
+     *
     public void find() {
         if (name == null) {
             persons = recruitmentController.find();
         } else {
             persons = recruitmentController.find(name);
         }
-    }
+    }*/
     
     public void search(){
-        persons = recruitmentController.search(name, fromDate, toDate, competence);
+        persons = recruitmentController.search(new RecruitmentQueryDTO(firstName, surName, fromDate, toDate, competence));
     }
 
     /**
@@ -123,12 +125,20 @@ public class RecruitmentManager implements Serializable {
         this.competences = competences;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    
+    public String getSurName() {
+        return surName;
+    }
+
+    public void setSurName(String surName) {
+        this.surName = surName;
     }
 
     public Date getFromDate() {

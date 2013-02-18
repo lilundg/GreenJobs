@@ -61,7 +61,7 @@
     -->
     <login-config>
         <auth-method>FORM</auth-method>
-        <realm-name>JLogin</realm-name>
+        <realm-name>RecruitLogin</realm-name>
         <form-login-config>
             <form-login-page>/login.html</form-login-page>
             <form-error-page>/error.html</form-error-page>
@@ -78,11 +78,9 @@
     <security-constraint>
         <display-name>Reviewer</display-name>
         <web-resource-collection>
-            <web-resource-name>View applications</web-resource-name>
+            <web-resource-name>manage</web-resource-name>
             <description/>
-            <url-pattern>/applications/*</url-pattern>
-            <http-method>GET</http-method>
-            <http-method>POST</http-method>
+            <url-pattern>/manage/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>

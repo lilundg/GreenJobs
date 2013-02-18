@@ -9,14 +9,19 @@ import andlin.recruit.model.Person;
 import andlin.recruit.model.Role;
 import andlin.recruit.model.dto.CompetenceDTO;
 import andlin.recruit.model.dto.PersonDTO;
+import andlin.recruit.model.dto.RecruitmentQueryDTO;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -31,7 +36,10 @@ public class RecruitmentController {
     @PersistenceContext(unitName = "RecruitPU")
     private EntityManager em;
     private List<Person> persons;
-
+    /*
+    @Inject
+    Logger logger;
+    */
     public void persist(Object object) {
         em.persist(object);
     }
@@ -74,29 +82,44 @@ public class RecruitmentController {
         return model;
     }
     
-    public DataModel<PersonDTO> search(String name, Date from, Date to, CompetenceDTO comp){
-        if(name == null){
-            name = "";
-        }
+    public DataModel<PersonDTO> search(RecruitmentQueryDTO queryValues){
+        String firstName = "";
+        String surName = "";
+        Date fromDate = null;
+        Date toDate = null;
         String competence = "";
-        if(comp != null){
-            competence = comp.getName();
+        if(queryValues.getFirstName() != null){
+            firstName = queryValues.getFirstName();
         }
-        DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
-        String fromDate = "01-01-2000";
-        String toDate = "01-01-2100";
-        if(from != null){
-            fromDate = df.format(from);
+        if(queryValues.getSurName() != null){
+            surName = queryValues.getSurName();
         }
-        if(to != null){
-            toDate = df.format(to);
+        if(queryValues.getCompetence() != null){
+            competence = queryValues.getCompetence().getName();
+        }
+        try {
+            DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+            if(queryValues.getFrom() != null){
+                fromDate = queryValues.getFrom();
+            }else{
+                    fromDate = df.parse("01-01-2000");
+
+            }
+            if(queryValues.getTo() != null){
+                toDate = queryValues.getTo();
+            }else{
+                toDate = df.parse("01-01-2100");
+            }
+        } catch (ParseException ex) {
+            //logger.log(Level.SEVERE, null, ex);
         }
         //Query query = em.createQuery("SELECT DISTINCT p FROM Person p, CompetenceProfile c WHERE p = c.personId AND c.competenceId.name LIKE ?2 AND (p.name LIKE ?1 OR p.surname LIKE ?1)");
-        Query query = em.createQuery("SELECT DISTINCT p FROM Person p, CompetenceProfile c, Availability a WHERE p = c.personId AND p = a.personId AND c.competenceId.name LIKE ?2 AND (p.name LIKE ?1 OR p.surname LIKE ?1) AND a.fromDate >= ?3 AND a.toDate <= ?4");
-        query.setParameter(1, "%" + name + "%");
-        query.setParameter(2, "%" + competence + "%");
-        query.setParameter(3, fromDate);
-        query.setParameter(4, toDate);
+        Query query = em.createQuery("SELECT DISTINCT p FROM Person p, CompetenceProfile c, Availability a WHERE p = c.personId AND p = a.personId AND c.competenceId.name LIKE ?3 AND p.name LIKE ?1 AND p.surname LIKE ?2 AND a.fromDate >= ?4 AND a.toDate <= ?5");
+        query.setParameter(1, "%" + firstName + "%");
+        query.setParameter(2, "%" + surName + "%");
+        query.setParameter(3, "%" + competence + "%");
+        query.setParameter(4, fromDate);
+        query.setParameter(5, toDate);
         
         List<Person> result = (List<Person>) query.getResultList();
         DataModel model = new ListDataModel((List<PersonDTO>) (List<?>) result);
