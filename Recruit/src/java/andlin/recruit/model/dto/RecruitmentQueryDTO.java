@@ -52,5 +52,4 @@ public class RecruitmentQueryDTO {
     public CompetenceDTO getCompetence() {
         return competence;
     }
-    
 }
