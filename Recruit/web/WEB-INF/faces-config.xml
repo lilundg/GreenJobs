@@ -18,64 +18,64 @@
     </application>
     
     <navigation-rule>
-        <from-view-id>/apply/register.xhtml</from-view-id>
+        <from-view-id>/secure/apply/register.xhtml</from-view-id>
         <navigation-case>
             <from-action>#{registrationManager.newApplication}</from-action>
             <from-outcome>success</from-outcome>
-            <to-view-id>/apply/register2.xhtml</to-view-id>
+            <to-view-id>/secure/apply/register2.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-action>#{registrationManager.newApplication}</from-action>
             <from-outcome>failure</from-outcome>
-            <to-view-id>/apply/register.xhtml</to-view-id>
+            <to-view-id>/secure/apply/register.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     
     <navigation-rule>
-        <from-view-id>/apply/register2.xhtml</from-view-id>
+        <from-view-id>/secure/apply/register2.xhtml</from-view-id>
         <navigation-case>
             <from-action>#{registrationManager.doneAddCompetence}</from-action>
             <from-outcome>success</from-outcome>
-            <to-view-id>/apply/register3.xhtml</to-view-id>
+            <to-view-id>/secure/apply/register3.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-action>#{registrationManager.doneAddCompetence}</from-action>
             <from-outcome>failure</from-outcome>
-            <to-view-id>/apply/register2.xhtml</to-view-id>
+            <to-view-id>/secure/apply/register2.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     
         <navigation-rule>
-        <from-view-id>/apply/register3.xhtml</from-view-id>
+        <from-view-id>/secure/apply/register3.xhtml</from-view-id>
         <navigation-case>
             <from-action>#{registrationManager.doneAddAvailability}</from-action>
             <from-outcome>success</from-outcome>
-            <to-view-id>/apply/register4.xhtml</to-view-id>
+            <to-view-id>/secure/apply/register4.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-action>#{registrationManager.doneAddAvailability}</from-action>
             <from-outcome>failure</from-outcome>
-            <to-view-id>/apply/register3.xhtml</to-view-id>
+            <to-view-id>/secure/apply/register3.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     
     <navigation-rule>
-        <from-view-id>/apply/register4.xhtml</from-view-id>
+        <from-view-id>/secure/apply/register4.xhtml</from-view-id>
         <navigation-case>
             <from-action>#{registrationManager.registerApplication}</from-action>
             <from-outcome>success</from-outcome>
-            <to-view-id>/apply/registration_success.xhtml</to-view-id>
+            <to-view-id>/secure/apply/registration_success.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     
   
     <!--Managing applications -->
     <navigation-rule>
-        <from-view-id>/manage/manage.xhtml</from-view-id>
+        <from-view-id>/secure/manage/manage.xhtml</from-view-id>
         <navigation-case>
             <from-action>#{recruitmentManager.show}</from-action>
             <from-outcome>success</from-outcome>
-            <to-view-id>/manage/show.xhtml</to-view-id>
+            <to-view-id>/secure/manage/show.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     

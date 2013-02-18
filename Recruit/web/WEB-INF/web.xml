@@ -22,18 +22,6 @@
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
     <security-constraint>
-        <display-name>Apply</display-name>
-        <web-resource-collection>
-            <web-resource-name>Apply</web-resource-name>
-            <description/>
-            <url-pattern>/apply/*</url-pattern>
-        </web-resource-collection>
-        <user-data-constraint>
-            <description>HTTPS</description>
-            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>
-    </security-constraint>
-    <security-constraint>
         <display-name>Home</display-name>
         <web-resource-collection>
             <web-resource-name>Home</web-resource-name>
@@ -92,7 +80,7 @@
         <web-resource-collection>
             <web-resource-name>manage</web-resource-name>
             <description/>
-            <url-pattern>/manage/*</url-pattern>
+            <url-pattern>/secure/manage/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>
