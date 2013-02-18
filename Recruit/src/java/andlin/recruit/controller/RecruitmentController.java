@@ -36,35 +36,6 @@ public class RecruitmentController {
     public void persist(Object object) {
         em.persist(object);
     }
-
-    /**
-     * Query database for all available applicants i.e. persons
-     * with role = 'job_seeker'
-     * 
-     * @return a list of job seekers (Person)
-     */
-    public DataModel<PersonDTO> find() {
-        Query query = em.createNamedQuery("Role.findByName").setParameter("name", "job_seeker");
-        Role role = (Role) query.getResultList().get(query.getFirstResult());      
-        Query queryPersons = em.createQuery("select p from Person p where p.roleId = :roleId");        
-        queryPersons.setParameter("roleId", role);        
-        persons = queryPersons.getResultList();     
-        DataModel model = new ListDataModel((List<PersonDTO>) (List<?>) persons);
-        return model;
-    }
-
-        /**
-     * Query database for applicants by name
-     * 
-     * @return a list of job seekers with matching name (Person)
-     */
-    public DataModel<PersonDTO> find(String name) {
-        Query query = em.createNamedQuery("Person.findByName");
-        query.setParameter("name", name);
-        persons = (List<Person>) query.getResultList();
-        DataModel model = new ListDataModel((List<PersonDTO>) (List<?>) persons);
-        return model;
-    }
     
     /**
      * Query database according to given parameters
@@ -104,8 +75,8 @@ public class RecruitmentController {
         }
         //Query query = em.createQuery("SELECT DISTINCT p FROM Person p, CompetenceProfile c WHERE p = c.personId AND c.competenceId.name LIKE ?2 AND (p.name LIKE ?1 OR p.surname LIKE ?1)");
         Query query = em.createQuery("SELECT DISTINCT p FROM Person p, CompetenceProfile c, Availability a WHERE p = c.personId AND p = a.personId AND c.competenceId.name LIKE ?3 AND p.name LIKE ?1 AND p.surname LIKE ?2 AND a.fromDate >= ?4 AND a.toDate <= ?5 AND p.roleId.name = 'job_seeker'");
-        query.setParameter(1, "%" + firstName + "%");
-        query.setParameter(2, "%" + surName + "%");
+        query.setParameter(1, firstName + "%");
+        query.setParameter(2, surName + "%");
         query.setParameter(3, "%" + competence + "%");
         query.setParameter(4, fromDate);
         query.setParameter(5, toDate);

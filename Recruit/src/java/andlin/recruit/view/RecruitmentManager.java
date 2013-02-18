@@ -50,17 +50,10 @@ public class RecruitmentManager implements Serializable {
         competences = recruitmentController.getCompetences();
     }
 
-    /**
-     * Query database for all job seekers
-     *
-    public void find() {
-        if (name == null) {
-            persons = recruitmentController.find();
-        } else {
-            persons = recruitmentController.find(name);
-        }
-    }*/
     
+    /**
+     * 
+     */
     public void search(){
         persons = recruitmentController.search(new RecruitmentQueryDTO(firstName, surName, fromDate, toDate, competence));
     }
