@@ -122,10 +122,6 @@ public class RegistrationManager implements Serializable {
         if (competenceProfileList == null) {
             competenceProfileList = new ArrayList<CompetenceProfile>();
         }
-        /*ArrayList<Competence> comps = new ArrayList<Competence>();
-        for (CompetenceProfile competenceProfile : competenceProfileList) {
-            comps.add(competenceProfile.getCompetenceId());
-        }*/
         
         return (List<CompetenceProfileDTO>) (List<?>) competenceProfileList;
     }
@@ -143,12 +139,6 @@ public class RegistrationManager implements Serializable {
             competenceProfileList = new ArrayList<CompetenceProfile>();
         }
 
-        //Create Competence instance from CompetenceDTO
-        /*
-        Competence competence = new Competence();
-        competence.setCompetenceId(competenceDTO.getCompetenceId());
-        competence.setName(competence.getName());
-        */
         Competence comp = (Competence) competence;
 
         //Check for duplicates/if already selected
