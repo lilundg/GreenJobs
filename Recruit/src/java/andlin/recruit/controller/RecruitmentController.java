@@ -114,7 +114,7 @@ public class RecruitmentController {
             //logger.log(Level.SEVERE, null, ex);
         }
         //Query query = em.createQuery("SELECT DISTINCT p FROM Person p, CompetenceProfile c WHERE p = c.personId AND c.competenceId.name LIKE ?2 AND (p.name LIKE ?1 OR p.surname LIKE ?1)");
-        Query query = em.createQuery("SELECT DISTINCT p FROM Person p, CompetenceProfile c, Availability a WHERE p = c.personId AND p = a.personId AND c.competenceId.name LIKE ?3 AND p.name LIKE ?1 AND p.surname LIKE ?2 AND a.fromDate >= ?4 AND a.toDate <= ?5");
+        Query query = em.createQuery("SELECT DISTINCT p FROM Person p, CompetenceProfile c, Availability a WHERE p = c.personId AND p = a.personId AND c.competenceId.name LIKE ?3 AND p.name LIKE ?1 AND p.surname LIKE ?2 AND a.fromDate >= ?4 AND a.toDate <= ?5 AND p.roleId.name = 'job_seeker'");
         query.setParameter(1, "%" + firstName + "%");
         query.setParameter(2, "%" + surName + "%");
         query.setParameter(3, "%" + competence + "%");
