@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
     <h:body>
         <ui:composition template="/template.xhtml">
             <ui:define name="pageTitle">
@@ -12,22 +13,22 @@
                 <h:form>
                     <h:panelGrid>
                         <h:outputLabel for="firstName" value="#{msgs['register.firstName']} :"/>
-                        <h:inputText id="firstName" value="#{registrationManager.firstName}"/>
+                        <p:inputText id="firstName" value="#{registrationManager.firstName}"/>
                         <h:message for="firstName"/>
 
                         <h:outputLabel for="lastName"  value="#{msgs['register.lastName']} :"/>
-                        <h:inputText id="lastName" value="#{registrationManager.surName}"/>
+                        <p:inputText id="lastName" value="#{registrationManager.surName}"/>
                         <h:message for="lastName"/>
 
                         <h:outputLabel for="ssn"  value="#{msgs['register.ssn']} :"/>
-                        <h:inputText id="ssn" value="#{registrationManager.ssn}"/>
+                        <p:inputMask mask="99999999-9999" id="ssn" value="#{registrationManager.ssn}"/>
                         <h:message for="ssn"/>
 
                         <h:outputLabel for="email"  value="#{msgs['register.email']} :"/>
-                        <h:inputText id="email" value="#{registrationManager.email}"/>
+                        <p:inputText id="email" value="#{registrationManager.email}"/>
                         <h:message for="email"/>
 
-                        <h:commandButton value="#{msgs['nav.nextPage']}" action="#{registrationManager.newApplication}"/>           
+                        <p:commandButton value="#{msgs['nav.nextPage']}" action="#{registrationManager.newApplication}"/>           
                     </h:panelGrid>
                 </h:form>
             </ui:define>

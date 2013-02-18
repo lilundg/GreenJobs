@@ -10,6 +10,10 @@
             </ui:define>
             <ui:define name="content">
                 <h:outputText value="#{msgs['register.thankyou']}"/>
+                <br/>
+                <h:outputLink value="#{request.contextPath}/" >
+                    #{msgs['navbar.home']}
+                </h:outputLink>
             </ui:define>
         </ui:composition>
     </h:body>

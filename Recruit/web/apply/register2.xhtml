@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
     <h:body>
         <ui:composition template="/template.xhtml">
             <ui:define name="pageTitle">
@@ -16,19 +17,19 @@
 
                         <f:view>
                             <h:form>
-                                <h:selectOneMenu id="competences"
+                                <p:selectOneMenu id="competences"
                                                  value="#{registrationManager.competence}" converter="#{competenceDTOConverter}">
                                     <f:selectItems value="#{registrationManager.competences}"/> 
-                                </h:selectOneMenu>
+                                </p:selectOneMenu>
 
                             </h:form>
                         </f:view>
 
                         <h:outputLabel for="yearsOfExperience" value="#{msgs['register.yearsofexperience']} :"/>
-                        <h:inputText id="yearsOfExperience" value="#{registrationManager.yearsOfExperience}"/>
+                        <p:inputText id="yearsOfExperience" value="#{registrationManager.yearsOfExperience}"/>
                         <h:message for="yearsOfExperience"/>
 
-                        <h:commandButton value="#{msgs['register.button.select']}" action="#{registrationManager.addCompetence}"/>
+                        <p:commandButton value="#{msgs['register.button.select']}" action="#{registrationManager.addCompetence}"/>
 
 
                     </h:panelGrid>      

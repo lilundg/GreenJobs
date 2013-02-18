@@ -5,13 +5,22 @@
 package andlin.recruit.view;
 
 import andlin.recruit.controller.RegistrationController;
+import andlin.recruit.model.Availability;
+import andlin.recruit.model.Competence;
+import andlin.recruit.model.CompetenceProfile;
+import andlin.recruit.model.Person;
+import andlin.recruit.model.Role;
 import andlin.recruit.model.dto.AvailabilityDTO;
 import andlin.recruit.model.dto.CompetenceDTO;
 import andlin.recruit.validation.ValidEmail;
 import andlin.recruit.validation.ValidSSN;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -19,20 +28,22 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.persistence.Query;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * JSF Managed Bean representing client on server
+ * JSF Managed Bean representing view on server
  */
-//@Named(value = "registrationManager")
-//@SessionScoped
+@Named(value = "registrationManager")
+@SessionScoped
 public class RegistrationManager implements Serializable {
 
     @EJB
     private RegistrationController registrationController;
+    
     @NotNull(message = "{register.firstname.null}")
     @Size(min = 1, max = 255, message = "{register.firstName.size}")
     private String firstName;
@@ -60,6 +71,10 @@ public class RegistrationManager implements Serializable {
     private List<CompetenceDTO> selectedCompetences;
     //The selected competence
     private CompetenceDTO competence;
+    //
+    private Person person;
+    private List<Availability> availabilityList;
+    private ArrayList<CompetenceProfile> competenceProfileList;
 
     /**
      * Creates a new instance of RegistrationManager
@@ -81,7 +96,21 @@ public class RegistrationManager implements Serializable {
      * @return "success" if successful, else "failure"
      */
     public String newApplication() throws Exception {
-        return registrationController.newApplication(firstName, surName, ssn, email);
+        if (person == null) {
+            person = new Person();
+        }
+        Role role = registrationController.getSeekerRole();
+        if(role == null){
+            return "failure";
+        }else{
+            person.setName(firstName);
+            person.setSurname(surName);
+            person.setSsn(ssn);
+            person.setEmail(email);
+            person.setRoleId(role);
+
+            return "success";
+        }
     }
 
     /**
@@ -89,7 +118,14 @@ public class RegistrationManager implements Serializable {
      * @return List of competenceDTO's
      */
     public List<CompetenceDTO> getSelectedCompetences() {
-        return registrationController.getSelectedCompetences();
+        if (competenceProfileList == null) {
+            competenceProfileList = new ArrayList<CompetenceProfile>();
+        }
+        ArrayList<Competence> comps = new ArrayList<Competence>();
+        for (CompetenceProfile competenceProfile : competenceProfileList) {
+            comps.add(competenceProfile.getCompetenceId());
+        }
+        return (List<CompetenceDTO>) (List<?>) comps;
     }
 
     //Setter
@@ -101,7 +137,32 @@ public class RegistrationManager implements Serializable {
      * Add the selected competence to list of selected competences
      */
     public void addCompetence() {
-        registrationController.addCompetence(competence, yearsOfExperience);
+        if (competenceProfileList == null) {
+            competenceProfileList = new ArrayList<CompetenceProfile>();
+        }
+
+        //Create Competence instance from CompetenceDTO
+        /*
+        Competence competence = new Competence();
+        competence.setCompetenceId(competenceDTO.getCompetenceId());
+        competence.setName(competence.getName());
+        */
+        Competence comp = (Competence) competence;
+
+        //Check for duplicates/if already selected
+        for (CompetenceProfile competenceProfile : competenceProfileList) {
+            if (competenceProfile.getCompetenceId().equals(comp)) {
+                return;
+            }
+        }
+
+        //Create CompetenceProfile instance from Competence and yearsOfExperience       
+        CompetenceProfile competenceProfile = new CompetenceProfile();
+        competenceProfile.setCompetenceId(comp);
+        competenceProfile.setYearsOfExperience(new BigDecimal(yearsOfExperience));
+        competenceProfile.setPersonId(person);
+
+        competenceProfileList.add(competenceProfile);
         yearsOfExperience = "";
     }
 
@@ -111,8 +172,11 @@ public class RegistrationManager implements Serializable {
      */
     public String doneAddCompetence() {
 
-        String status = registrationController.doneAddCompetence();
-
+        String status = "failure";
+        //User must have selected atleast one competence
+        if ((competenceProfileList != null) && !(competenceProfileList.isEmpty())) {
+            status = "success";
+        }
         if (status.equals("failure")) {
             notifyError("register.competence.size");
         }
@@ -123,7 +187,23 @@ public class RegistrationManager implements Serializable {
      * Adds a time period the applicant is available for work.
      */
     public void addAvailability() {
-        registrationController.addAvailability(availableFrom, availableTo);
+        if (availabilityList == null) {
+            availabilityList = new LinkedList<Availability>();
+        }
+
+        Availability availability = new Availability();
+        availability.setFromDate(availableFrom);
+        availability.setToDate(availableTo);
+        availability.setPersonId(person);
+
+        //Avoid duplicates
+        for (Availability entry : availabilityList) {
+            if (entry.equals(availability)) {
+                return;
+            }
+        }
+
+        availabilityList.add(availability);
     }
 
     /**
@@ -131,16 +211,29 @@ public class RegistrationManager implements Serializable {
      * @return 
      */
     public String doneAddAvailability() {
-        String status = registrationController.doneAddAvailability();
+        String status = "failure";
+        //User must provide at least one time period
+        if (availabilityList != null) {
+            status = "success";
+        }
         if (status.equals("failure")) {
             notifyError("register.availability.size");
         }
-
         return status;
     }
 
     public String registerApplication() {
-        return registrationController.registerApplication();
+        person.setCompetenceProfileCollection(competenceProfileList);
+        person.setAvailabilityCollection(availabilityList);
+        registrationController.persist(person);
+
+        Locale loc = FacesContext.getCurrentInstance().getViewRoot().getLocale();
+        //We are done with registration, invalidate session.
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        
+        FacesContext.getCurrentInstance().getViewRoot().setLocale(loc);
+
+        return "success";
     }
 
     private void notifyError(String bundleString) {
@@ -160,7 +253,7 @@ public class RegistrationManager implements Serializable {
     }
 
     public List<AvailabilityDTO> getAvailabilities() {
-        return registrationController.getAvailabilities();
+        return (List<AvailabilityDTO>) (List<?>) availabilityList;
     }
 
     public void SetAvailabilities(List<AvailabilityDTO> availabilities) {
