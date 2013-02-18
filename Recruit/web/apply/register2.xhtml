@@ -43,7 +43,12 @@
                         <h:form>
                             <h:dataTable value="#{registrationManager.selectedCompetences}" var="item">
                                 <h:column>
-                                    <h:outputText value="#{item.name}"/>
+                                    <f:facet name="header">#{msgs['register.competence']}</f:facet>
+                                    <h:outputText value="#{item.competenceId.name}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">#{msgs['register.yearsofexperience']}</f:facet>
+                                    <h:outputText value="#{item.yearsOfExperience}"/>
                                 </h:column>
                             </h:dataTable>
                         </h:form>

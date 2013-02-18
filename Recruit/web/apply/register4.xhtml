@@ -24,10 +24,14 @@
                         <h:outputText id="email" value="#{registrationManager.email}"/>           
                     </h:panelGrid>
 
-                    <h:dataTable value="#{registrationManager.selectedCompetences}" var="item">
+                    <h:dataTable value="#{registrationManager.selectedCompetences}" var="citem">
                         <h:column>
                             <f:facet name="header">#{msgs['register.competence']}</f:facet>
-                            <h:outputText value="#{item}"/>
+                            <h:outputText value="#{citem.competenceId.name}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{msgs['register.yearsofexperience']}</f:facet>
+                            <h:outputText value="#{citem.yearsOfExperience}"/>
                         </h:column>
                     </h:dataTable>
 
