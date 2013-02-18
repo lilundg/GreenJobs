@@ -12,15 +12,28 @@
             </ui:define>
             <ui:define name="content">
 
-                <h:form>   
-                    <h:inputText value="#{recruitmentManager.name}"/><br/>
+<h:form>
+                    <h:outputLabel for="firstName" value="#{msgs['register.firstName']} :"/>
+                    <h:inputText id="firstName" value="#{recruitmentManager.firstName}"/><br/>
+                    
+                    <h:outputLabel for="lastName"  value="#{msgs['register.lastName']} :"/>
+                    <h:inputText id="lastName" value="#{recruitmentManager.surName}"/><br/>
+                    
+                    <h:outputLabel id="areaOfExpertiseText" for="competences" value="#{msgs['register.select.expertise']} :"/>
                     <h:selectOneMenu id="competences"
                                      value="#{recruitmentManager.competence}" converter="#{competenceDTOConverter}">
                         <f:selectItems value="#{recruitmentManager.competences}"/> 
                     </h:selectOneMenu>
                     <br/>
+                    
+                    <h:outputLabel for="from" value="#{msgs['register.from']} :" />
+                    <p:calendar locale="#{language.locale}" id="from" mode="popup" pattern="dd-MM-yyyy" navigator="true" value="#{recruitmentManager.fromDate}" /><br/>
+                    
+                    <h:outputLabel for="to" value="#{msgs['register.to']} :" />
+                    <p:calendar locale="#{language.locale}" id="to" mode="popup" pattern="dd-MM-yyyy" navigator="true" value="#{recruitmentManager.toDate}" />
+                    <br/>
 
-                    <h:commandButton value="Find" action="#{recruitmentManager.search}"/>
+                    <h:commandButton value="#{msgs['manage.button.find']}" action="#{recruitmentManager.search}"/>
 
                 </h:form>
                 

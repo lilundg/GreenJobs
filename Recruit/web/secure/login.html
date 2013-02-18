@@ -10,9 +10,11 @@ and open the template in the editor.
     </head>
     <body>
         <form method=post action="j_security_check" >
-            <input type="text"  name= "j_username" >
+            <label for="username">User name: </label>
+            <input  id="username" type="text"  name= "j_username" >
+            <label for="password">Password: </label>
             <input type="password"  name= "j_password" >
-            <input type="submit" >
+            <input type="submit" value="Log in" >
         </form>
     </body>
 </html>
