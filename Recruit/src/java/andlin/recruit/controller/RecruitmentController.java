@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package andlin.recruit.controller;
 
 import andlin.recruit.model.Competence;
@@ -15,19 +11,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
- *  This is the controller for handling applications
+ *  This is the controller for handling applications.
  */
 @Stateful
 @LocalBean
@@ -51,20 +44,11 @@ public class RecruitmentController {
      * @return a list of job seekers (Person)
      */
     public DataModel<PersonDTO> find() {
-        //persons = (List<Person>) em.createNamedQuery("Person.findAll").getResultList();
-
-        //get role 
         Query query = em.createNamedQuery("Role.findByName").setParameter("name", "job_seeker");
-
         Role role = (Role) query.getResultList().get(query.getFirstResult());      
-        
-        Query queryPersons = em.createQuery("select p from Person p where p.roleId = :roleId");
-        
-        queryPersons.setParameter("roleId", role);
-        //persons = em.createQuery("select p from Person p where p.roleId = :roleId").getResultList();        
-
-        persons = queryPersons.getResultList();
-        
+        Query queryPersons = em.createQuery("select p from Person p where p.roleId = :roleId");        
+        queryPersons.setParameter("roleId", role);        
+        persons = queryPersons.getResultList();     
         DataModel model = new ListDataModel((List<PersonDTO>) (List<?>) persons);
         return model;
     }
@@ -82,6 +66,11 @@ public class RecruitmentController {
         return model;
     }
     
+    /**
+     * Query database according to given parameters
+     * @param queryValues : search parameters
+     * @return : list of PersonDTO's matching search parameters
+     */
     public DataModel<PersonDTO> search(RecruitmentQueryDTO queryValues){
         String firstName = "";
         String surName = "";
@@ -129,9 +118,10 @@ public class RecruitmentController {
     
 
     /**
-     * Changes role of person from 'job_seeker' to 'accepted'
+     * Changes role of person from 'job_seeker' to 'accepted'. This
+     * means applicant is hired.
      *
-     * @param person
+     * @param person : person who's application is accepted
      */
     public void accept(PersonDTO person) {
         Query query = em.createNamedQuery("Role.findByName");
@@ -152,7 +142,7 @@ public class RecruitmentController {
     /**
      * Changes role of person from 'job_seeker' to 'rejected'
      *
-     * @param person
+     * @param person: person who's application is rejected
      */
     public void reject(PersonDTO person) {
         Query query = em.createNamedQuery("Role.findByName");
