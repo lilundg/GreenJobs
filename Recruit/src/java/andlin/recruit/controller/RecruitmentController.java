@@ -9,6 +9,8 @@ import andlin.recruit.model.Person;
 import andlin.recruit.model.Role;
 import andlin.recruit.model.dto.CompetenceDTO;
 import andlin.recruit.model.dto.PersonDTO;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.LocalBean;
@@ -72,7 +74,7 @@ public class RecruitmentController {
         return model;
     }
     
-    public DataModel<PersonDTO> search(String name, Date date, CompetenceDTO comp){
+    public DataModel<PersonDTO> search(String name, Date from, Date to, CompetenceDTO comp){
         if(name == null){
             name = "";
         }
@@ -80,10 +82,21 @@ public class RecruitmentController {
         if(comp != null){
             competence = comp.getName();
         }
-        Query query = em.createQuery("SELECT DISTINCT p FROM Person p, CompetenceProfile c WHERE p = c.personId AND c.competenceId.name LIKE ?2 AND (p.name LIKE ?1 OR p.surname LIKE ?1)");
-        //Query query = em.createQuery("SELECT p FROM Person p WHERE p.name LIKE ?1 OR p.surname LIKE ?1");
+        DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+        String fromDate = "01-01-2000";
+        String toDate = "01-01-2100";
+        if(from != null){
+            fromDate = df.format(from);
+        }
+        if(to != null){
+            toDate = df.format(to);
+        }
+        //Query query = em.createQuery("SELECT DISTINCT p FROM Person p, CompetenceProfile c WHERE p = c.personId AND c.competenceId.name LIKE ?2 AND (p.name LIKE ?1 OR p.surname LIKE ?1)");
+        Query query = em.createQuery("SELECT DISTINCT p FROM Person p, CompetenceProfile c, Availability a WHERE p = c.personId AND p = a.personId AND c.competenceId.name LIKE ?2 AND (p.name LIKE ?1 OR p.surname LIKE ?1) AND a.fromDate >= ?3 AND a.toDate <= ?4");
         query.setParameter(1, "%" + name + "%");
         query.setParameter(2, "%" + competence + "%");
+        query.setParameter(3, fromDate);
+        query.setParameter(4, toDate);
         
         List<Person> result = (List<Person>) query.getResultList();
         DataModel model = new ListDataModel((List<PersonDTO>) (List<?>) result);

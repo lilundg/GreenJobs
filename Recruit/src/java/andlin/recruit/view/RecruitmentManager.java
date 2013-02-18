@@ -8,6 +8,7 @@ import andlin.recruit.controller.RecruitmentController;
 import andlin.recruit.model.dto.CompetenceDTO;
 import andlin.recruit.model.dto.PersonDTO;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -27,6 +28,8 @@ public class RecruitmentManager implements Serializable {
     private DataModel<PersonDTO> persons;
     private PersonDTO currentPerson;
     private List<CompetenceDTO> competences;
+    private Date fromDate;
+    private Date toDate;
     //Search variables
     private String name;    
     private CompetenceDTO competence;
@@ -57,7 +60,7 @@ public class RecruitmentManager implements Serializable {
     }
     
     public void search(){
-        persons = recruitmentController.search(name, null, competence);
+        persons = recruitmentController.search(name, fromDate, toDate, competence);
     }
 
     /**
@@ -127,4 +130,22 @@ public class RecruitmentManager implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+    public Date getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(Date fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public Date getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(Date toDate) {
+        this.toDate = toDate;
+    }
+    
+    
 }

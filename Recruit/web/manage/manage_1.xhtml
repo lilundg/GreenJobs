@@ -4,7 +4,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.prime.com.tr/ui">
+      xmlns:p="http://primefaces.org/ui">
     <h:body>
         <ui:composition template="/template.xhtml">
             <ui:define name="pageTitle">
@@ -18,6 +18,11 @@
                                      value="#{recruitmentManager.competence}" converter="#{competenceDTOConverter}">
                         <f:selectItems value="#{recruitmentManager.competences}"/> 
                     </h:selectOneMenu>
+                    From:
+                    <p:calendar value="#{recruitmentManager.fromDate}" pattern="dd-MM-yyyy" />
+                    
+                    To:
+                    <p:calendar value="#{recruitmentManager.toDate}}" pattern="dd-MM-yyyy" />
                     <br/>
 
                     <h:commandButton value="Find" action="#{recruitmentManager.search}"/>
