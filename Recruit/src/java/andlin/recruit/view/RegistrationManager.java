@@ -12,6 +12,7 @@ import andlin.recruit.model.Person;
 import andlin.recruit.model.Role;
 import andlin.recruit.model.dto.AvailabilityDTO;
 import andlin.recruit.model.dto.CompetenceDTO;
+import andlin.recruit.model.dto.CompetenceProfileDTO;
 import andlin.recruit.validation.ValidEmail;
 import andlin.recruit.validation.ValidSSN;
 import java.io.Serializable;
@@ -117,15 +118,16 @@ public class RegistrationManager implements Serializable {
      * Fetches a list representing the available competence choices
      * @return List of competenceDTO's
      */
-    public List<CompetenceDTO> getSelectedCompetences() {
+    public List<CompetenceProfileDTO> getSelectedCompetences() {
         if (competenceProfileList == null) {
             competenceProfileList = new ArrayList<CompetenceProfile>();
         }
-        ArrayList<Competence> comps = new ArrayList<Competence>();
+        /*ArrayList<Competence> comps = new ArrayList<Competence>();
         for (CompetenceProfile competenceProfile : competenceProfileList) {
             comps.add(competenceProfile.getCompetenceId());
-        }
-        return (List<CompetenceDTO>) (List<?>) comps;
+        }*/
+        
+        return (List<CompetenceProfileDTO>) (List<?>) competenceProfileList;
     }
 
     //Setter

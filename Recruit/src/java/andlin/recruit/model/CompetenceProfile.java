@@ -4,6 +4,7 @@
  */
 package andlin.recruit.model;
 
+import andlin.recruit.model.dto.CompetenceProfileDTO;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.*;
@@ -20,7 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "CompetenceProfile.findAll", query = "SELECT c FROM CompetenceProfile c"),
     @NamedQuery(name = "CompetenceProfile.findByCompetenceProfileId", query = "SELECT c FROM CompetenceProfile c WHERE c.competenceProfileId = :competenceProfileId"),
     @NamedQuery(name = "CompetenceProfile.findByYearsOfExperience", query = "SELECT c FROM CompetenceProfile c WHERE c.yearsOfExperience = :yearsOfExperience")})
-public class CompetenceProfile implements Serializable {
+public class CompetenceProfile implements Serializable, CompetenceProfileDTO {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
