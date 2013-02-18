@@ -75,14 +75,18 @@
                             <f:facet name="header">  
                                 <h:outputText value="#{msgs['register.from']}" />  
                             </f:facet>  
-                            <h:outputText value="#{availability.fromDate}" />  
+                            <h:outputText value="#{availability.fromDate}">
+                                <f:convertDateTime type="date" pattern="yyyy-MM-dd"/>
+                            </h:outputText>
                         </p:column>  
 
                         <p:column>  
                             <f:facet name="header">  
                                 <h:outputText value="#{msgs['register.to']}" />  
                             </f:facet>  
-                            <h:outputText value="#{availability.toDate}" />  
+                            <h:outputText value="#{availability.toDate}">
+                                <f:convertDateTime type="date" pattern="yyyy-MM-dd"/>
+                            </h:outputText>
                         </p:column>  
 
                     </p:dataTable>  

@@ -52,7 +52,7 @@ CREATE TABLE `person` (
   `username` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`person_id`),
   KEY `person_role_idx` (`role_id`),
-  CONSTRAINT `personrole` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `personrole` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

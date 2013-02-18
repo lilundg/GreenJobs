@@ -76,7 +76,7 @@
         <realm-name>RecruitLogin</realm-name>
         <form-login-config>
             <form-login-page>/secure/login.html</form-login-page>
-            <form-error-page>/error.html</form-error-page>
+            <form-error-page>/secure/login.html</form-error-page>
         </form-login-config>
     </login-config>
     <security-role>
@@ -87,7 +87,6 @@
         <description/>
         <role-name>recruit</role-name>
     </security-role>
-    
     <security-constraint>
         <display-name>Reviewer</display-name>
         <web-resource-collection>
@@ -108,5 +107,5 @@
             javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL
         </param-name>
         <param-value>true</param-value>
-    </context-param>    
-    </web-app>
+    </context-param>
+</web-app>

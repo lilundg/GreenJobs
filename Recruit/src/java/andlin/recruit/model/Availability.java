@@ -102,10 +102,15 @@ public class Availability implements AvailabilityDTO, Serializable {
             return false;
         }
         Availability other = (Availability) object;
-        if ((this.availabilityId == null && other.availabilityId != null) || (this.availabilityId != null && !this.availabilityId.equals(other.availabilityId))) {
+        
+        if(this.fromDate.equals(other.fromDate) && this.toDate.equals(other.toDate))
+            return true;
+        else
             return false;
-        }
-        return true;
+        /*if ((this.availabilityId == null && other.availabilityId != null) || (this.availabilityId != null && !this.availabilityId.equals(other.availabilityId))) {
+            return false;*/
+        
+        //return true;
     }
 
     @Override

@@ -32,11 +32,15 @@
                     <h:dataTable value="#{registrationManager.availabilities}" var="item">
                         <h:column>
                             <f:facet name="header">#{msgs['register.from']}</f:facet>
-                            <h:outputText value="#{item.fromDate}"/>
+                            <h:outputText value="#{item.fromDate}">
+                                <f:convertDateTime type="date" pattern="yyyy-MM-dd"/>
+                            </h:outputText>
                         </h:column>
                         <h:column>
                             <f:facet name="header">#{msgs['register.to']}</f:facet> 
-                            <h:outputText value="#{item.toDate}"/>
+                            <h:outputText value="#{item.toDate}">
+                                <f:convertDateTime type="date" pattern="yyyy-MM-dd"/>
+                            </h:outputText>
                         </h:column>
                     </h:dataTable>
 
