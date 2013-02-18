@@ -1,11 +1,5 @@
 package andlin.recruit.controller;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
 import andlin.recruit.model.Competence;
 import andlin.recruit.model.Role;
 import andlin.recruit.model.dto.CompetenceDTO;

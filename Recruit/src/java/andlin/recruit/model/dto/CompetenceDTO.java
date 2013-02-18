@@ -5,19 +5,12 @@
 package andlin.recruit.model.dto;
 
 /**
-* Represents a read only view of the Competence entity class
+* Represents a read only view of the Competence entity class. 
+* Provides getters only.
  */
 public interface CompetenceDTO {
 
-    /**
-     * 
-     * @return 
-     */
     public Long getCompetenceId();
 
-    /**
-     * 
-     * @return 
-     */
     public String getName();
 }

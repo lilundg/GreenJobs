@@ -7,8 +7,9 @@ package andlin.recruit.model.dto;
 import java.util.Date;
 
 /**
- *
- * @author Linus
+ * This class represents an object used to store query
+ * parameters when searching for a person. It encapsulates
+ * name, work period and a competence. 
  */
 public class RecruitmentQueryDTO {
     
@@ -16,6 +17,14 @@ public class RecruitmentQueryDTO {
     private Date from, to;
     private CompetenceDTO competence;
     
+    /**
+     * Constructor
+     * @param firstName
+     * @param surName
+     * @param from : start of time period
+     * @param to : end of time period
+     * @param comp : competence
+     */
     public RecruitmentQueryDTO(String firstName, String surName, Date from, Date to, CompetenceDTO comp){
         this.firstName = firstName;
         this.surName = surName;

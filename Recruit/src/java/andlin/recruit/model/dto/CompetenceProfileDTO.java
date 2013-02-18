@@ -8,21 +8,13 @@ import andlin.recruit.model.Competence;
 import java.math.BigDecimal;
 
 /**
- *
- * @author Linus
+ *  Represents a read-only view of CompetenceProfile class.
+ * Provides getters only.
  */
 public interface CompetenceProfileDTO {
     
-    /**
-     * 
-     * @return 
-     */
     public BigDecimal getYearsOfExperience();
-    
-    /**
-     * 
-     * @return 
-     */
+
     public Competence getCompetenceId();
     
 }
