@@ -1,11 +1,7 @@
 package andlin.recruit.view;
 
 import andlin.recruit.controller.RegistrationController;
-import andlin.recruit.model.Availability;
-import andlin.recruit.model.Competence;
-import andlin.recruit.model.CompetenceProfile;
-import andlin.recruit.model.Person;
-import andlin.recruit.model.Role;
+import andlin.recruit.model.*;
 import andlin.recruit.model.dto.AvailabilityDTO;
 import andlin.recruit.model.dto.CompetenceDTO;
 import andlin.recruit.model.dto.CompetenceProfileDTO;
@@ -13,12 +9,7 @@ import andlin.recruit.validation.ValidEmail;
 import andlin.recruit.validation.ValidSSN;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;

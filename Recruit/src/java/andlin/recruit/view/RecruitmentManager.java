@@ -50,11 +50,10 @@ public class RecruitmentManager implements Serializable {
         competences = recruitmentController.getCompetences();
     }
 
-    
     /**
-     * 
+     *
      */
-    public void search(){
+    public void search() {
         persons = recruitmentController.search(new RecruitmentQueryDTO(firstName, surName, fromDate, toDate, competence));
     }
 
@@ -71,21 +70,31 @@ public class RecruitmentManager implements Serializable {
     /**
      * Accept application of currentPerson
      */
-    public void accept() {
+    public String accept() {
         recruitmentController.accept(currentPerson);
+        return refreshManageView();
     }
 
     /**
      * Reject application of currentPerson
      */
-    public void reject() {
+    public String reject() {
         recruitmentController.reject(currentPerson);
+        return refreshManageView();
+
     }
 
-    
-    /***********************
+    //update search list and direct user to manage.xhtml
+    private String refreshManageView() {
+        search();
+        return "/secure/manage/manage.xhtml";
+    }
+
+    /**
+     * *********************
      * GETTERS AND SETTERS *
-     ***********************/
+     **********************
+     */
     public DataModel<PersonDTO> getPersons() {
         return persons;
     }
@@ -125,7 +134,7 @@ public class RecruitmentManager implements Serializable {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-    
+
     public String getSurName() {
         return surName;
     }
@@ -149,6 +158,4 @@ public class RecruitmentManager implements Serializable {
     public void setToDate(Date toDate) {
         this.toDate = toDate;
     }
-    
-    
 }
