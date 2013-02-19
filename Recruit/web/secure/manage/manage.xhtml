@@ -72,8 +72,11 @@
 
                         <p:column>  
 
-                            <h:commandLink value="#{msgs['manage.button.show']}" action="#{recruitmentManager.show}"/> 
+                            <h:commandLink value="#{msgs['manage.button.show']}" action="#{recruitmentManager.show}"/>
                         </p:column> 
+                        <p:column>
+                            <h:commandLink value="#{msgs['manage.button.showPDF']}" action="#{recruitmentManager.createPDF}" />
+                        </p:column>
 
                     </p:dataTable>  
 
