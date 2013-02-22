@@ -105,12 +105,9 @@ public class RecruitmentManager implements Serializable {
     public void createPDF(){
         FacesContext context = FacesContext.getCurrentInstance(); 
         try {
-            PersonDTO person = persons.getRowData();
-            String fileName = "Application_" + person.getName() + "_" + person.getSurname() + ".pdf";
-            HttpServletResponse response = (HttpServletResponse)context.getExternalContext().getResponse();  
-            response.setContentType("application/pdf");  
-            response.setHeader("Content-disposition", "attachment; filename=" + fileName);
+            HttpServletResponse response = (HttpServletResponse)context.getExternalContext().getResponse(); 
             Locale locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
+            PersonDTO person = persons.getRowData();
             ResourceBundle rb = ResourceBundle.getBundle("andlin.recruit.locale.messages", locale);
             Iterator<CompetenceProfile> competence = person.getCompetenceProfileCollection().iterator();
             Iterator<Availability> available = person.getAvailabilityCollection().iterator();
@@ -172,7 +169,9 @@ public class RecruitmentManager implements Serializable {
             // step 5: Finish the document
             document.close();
 
-            // setting some response headers
+            // setting some response headers 
+            String fileName = "Application_" + person.getName() + "_" + person.getSurname() + ".pdf";
+            response.setHeader("Content-disposition", "attachment; filename=" + fileName);
             response.setHeader("Expires", "0");
             response.setHeader("Cache-Control",
                 "must-revalidate, post-check=0, pre-check=0");
