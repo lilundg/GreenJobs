@@ -28,11 +28,7 @@ public class RecruitmentController {
 
     @PersistenceContext(unitName = "RecruitPU")
     private EntityManager em;
-    //private List<Person> persons;
-    /*
-    @Inject
-    Logger logger;
-    */
+
     public void persist(Object object) {
         em.persist(object);
     }

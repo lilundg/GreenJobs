@@ -7,7 +7,6 @@ package andlin.recruit.view;
 import andlin.recruit.controller.RecruitmentController;
 import andlin.recruit.model.Availability;
 import andlin.recruit.model.CompetenceProfile;
-import andlin.recruit.model.dto.AvailabilityDTO;
 import andlin.recruit.model.dto.CompetenceDTO;
 import andlin.recruit.model.dto.PersonDTO;
 import andlin.recruit.model.dto.RecruitmentQueryDTO;
@@ -16,7 +15,6 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPHeaderCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.ByteArrayOutputStream;
@@ -25,11 +23,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -64,7 +58,7 @@ public class RecruitmentManager implements Serializable {
     }
 
     /**
-     * Fetches all available competences
+     * Fetches all available competences after construction
      */
     @PostConstruct
     public void init() {
@@ -72,7 +66,7 @@ public class RecruitmentManager implements Serializable {
     }
 
     /**
-     *
+     * Search for person in database
      */
     public void search() {
         persons = recruitmentController.search(new RecruitmentQueryDTO(firstName, surName, fromDate, toDate, competence));
@@ -105,6 +99,9 @@ public class RecruitmentManager implements Serializable {
 
     }
     
+    /**
+     * Outputs a pdf version of an application.
+     */
     public void createPDF(){
         FacesContext context = FacesContext.getCurrentInstance(); 
         HttpServletResponse response = (HttpServletResponse)context.getExternalContext().getResponse();  
