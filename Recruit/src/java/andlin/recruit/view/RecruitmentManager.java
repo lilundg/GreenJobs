@@ -100,17 +100,18 @@ public class RecruitmentManager implements Serializable {
     }
     
     /**
-     * Outputs a pdf version of an application.
+     * Creates a PDF version of an application and sends it to the user as a downloadable file
      */
     public void createPDF(){
         FacesContext context = FacesContext.getCurrentInstance(); 
-        HttpServletResponse response = (HttpServletResponse)context.getExternalContext().getResponse();  
-        response.setContentType("application/pdf");  
-        response.setHeader("Content-disposition",  "inline=filename=file.pdf");
         try {
+            PersonDTO person = persons.getRowData();
+            String fileName = "Application_" + person.getName() + "_" + person.getSurname() + ".pdf";
+            HttpServletResponse response = (HttpServletResponse)context.getExternalContext().getResponse();  
+            response.setContentType("application/pdf");  
+            response.setHeader("Content-disposition", "attachment; filename=" + fileName);
             Locale locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
             ResourceBundle rb = ResourceBundle.getBundle("andlin.recruit.locale.messages", locale);
-            PersonDTO person = persons.getRowData();
             Iterator<CompetenceProfile> competence = person.getCompetenceProfileCollection().iterator();
             Iterator<Availability> available = person.getAvailabilityCollection().iterator();
             // step 1: create document
@@ -196,8 +197,9 @@ public class RecruitmentManager implements Serializable {
         }
         catch (Exception ex) {
     //        log.debug("error: " + ex.getMessage());
+        }finally{
+            context.responseComplete();
         }
-    context.responseComplete();
 
 
     }
