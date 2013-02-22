@@ -58,3 +58,16 @@ body{
 .ui-widget{
     font-size:12px;
 }
+
+#ui-datatable a:link{
+    color:#ffffff;
+}
+
+#ui-datatable a:visited{
+    color:#0000ff;
+}
+
+#ui-datatable a:hover,a:active{
+    color:#999999;
+    background-color: #ffffff;
+}
