@@ -51,6 +51,7 @@ CREATE TABLE `person` (
   `role_id` bigint(20) NOT NULL,
   `username` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`person_id`),
+  UNIQUE KEY `username_UNIQUE` (`username`),
   KEY `person_role_idx` (`role_id`),
   CONSTRAINT `personrole` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
@@ -123,14 +124,16 @@ INSERT INTO role (role_id, name) VALUES (1, 'recruit');
 INSERT INTO role (role_id, name) VALUES (2, 'job_seeker');
 INSERT INTO role (role_id, name) VALUES (3, 'accepted');
 INSERT INTO role (role_id, name) VALUES (4, 'rejected');
-INSERT INTO person (name, surname, username, password, role_id) VALUES ( 'Greta', 'Borg', 'borg', 'wl9nk23a', 1);
-INSERT INTO person (name, surname, ssn, email, role_id) VALUES ('Per', 'Strand', '19671212-1211', 'per@strand.kth.se', 2);
-INSERT INTO availability (availability_id, person_id, from_date, to_date) VALUES (1, 2, '2003-02-23', '2003-05-25');
-INSERT INTO availability (availability_id, person_id, from_date, to_date) VALUES (2, 2, '2004-02-23', '2004-05-25');
 INSERT competence (competence_id, name) VALUES (1, 'Karuselldrift');
 INSERT competence (competence_id, name) VALUES (2, 'Korvgrillning');
 INSERT competence (competence_id, name) VALUES (3, 'Clown');
 INSERT competence (competence_id, name) VALUES (4, 'Sockervaddning');
 INSERT competence (competence_id, name) VALUES (5, 'Spökeri');
+
+-- Remove before delivery
+INSERT INTO person (name, surname, username, password, role_id) VALUES ( 'Greta', 'Borg', 'borg', 'wl9nk23a', 1);
+INSERT INTO person (name, surname, ssn, email, role_id) VALUES ('Per', 'Strand', '19671212-1211', 'per@strand.kth.se', 2);
+INSERT INTO availability (availability_id, person_id, from_date, to_date) VALUES (1, 2, '2003-02-23', '2003-05-25');
+INSERT INTO availability (availability_id, person_id, from_date, to_date) VALUES (2, 2, '2004-02-23', '2004-05-25');
 INSERT INTO competence_profile (competence_profile_id, person_id, competence_id, years_of_experience) VALUES (1, 2, 1, 3.5);
 INSERT INTO competence_profile (competence_profile_id, person_id, competence_id, years_of_experience) VALUES (2, 2, 2, 2.0);
